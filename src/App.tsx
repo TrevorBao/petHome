@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Auth from "./components/Auth";
+import CreatePetInfo from "./components/CreatePetInfo";
 import { db, auth, storage } from "./firebase";
 import {
   collection,
@@ -122,8 +123,9 @@ function App() {
   return (
     <>
       <Auth />
+      <CreatePetInfo />
 
-      <div>
+      {/* <div>
         <input
           type="text"
           placeholder="Name of the Pet"
@@ -172,7 +174,7 @@ function App() {
           }}
         />
         <button onClick={uploadFiles}>Upload File</button>
-      </div>
+      </div> */}
     </>
   );
 }
