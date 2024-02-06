@@ -1,237 +1,375 @@
-import "../css/createPetInfo.css";
+import { useRef, useState } from "react";
+import { db, auth, storage } from "../firebase";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import image from "../assets/uploadImage.svg";
+import {
+  FormControl,
+  FormLabel,
+  Input,
+  Textarea,
+  Button,
+  VStack,
+  Select,
+  Heading,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+  Box,
+  Image,
+  Text,
+  Flex,
+  CloseButton,
+} from "@chakra-ui/react";
 
-export default function CreatePetInfo() {
+const CreatePetInfo = () => {
+  // Create new Pet Info
+  const [petName, setPetName] = useState("");
+  const [petType, setPetType] = useState("");
+  const [petBreed, setPetBreed] = useState("");
+  const [petAge, setPetAge] = useState("");
+  const [petWeight, setPetWeight] = useState("");
+  const [petSex, setPetSex] = useState("");
+  const [isSpayed, setIsSpayed] = useState("false");
+  const [petHealth, setPetHealth] = useState("");
+  const [allergy, setAllergy] = useState("");
+  const [detail, setDetail] = useState("");
+  const [imageUrls, setImageUrls] = useState<string[]>([]);
+
+  // File Upload State
+  const [fileUpload, setFileUpload] = useState<FileList | null>(null);
+
+  const [imagePreviews, setImagePreviews] = useState<string[]>([]);
+
+  const petCollectionRef = collection(db, "petInfo");
+
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    try {
+      await addDoc(petCollectionRef, {
+        name: petName,
+        breed: petBreed,
+        type: petType,
+        age: petAge,
+        isSpayed: isSpayed,
+        sex: petSex,
+        weight: petWeight,
+        health: petHealth,
+        detail: detail,
+        allergy: allergy,
+        imageUrls: imageUrls,
+        userId: auth?.currentUser?.uid,
+      });
+
+      uploadFiles();
+
+      // Reset form and image states
+      setPetName("");
+      setPetType("");
+      setPetBreed("");
+      setPetAge("");
+      setPetWeight("");
+      setPetSex("");
+      setIsSpayed("false");
+      setPetHealth("");
+      setAllergy("");
+      setDetail("");
+      setImagePreviews([]);
+      setFileUpload(null);
+      //   setImageUrls([]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const uploadFiles = async () => {
+    if (fileUpload) {
+      const uploadPromises = [];
+      const newImageUrls = [...imageUrls]; // Copy the current imageUrls
+
+      for (let i = 0; i < fileUpload.length; i++) {
+        const file = fileUpload.item(i);
+        if (file) {
+          const fileFolderRef = ref(storage, `users/${file.name}`);
+          const uploadPromise = uploadBytes(fileFolderRef, file)
+            .then((snapshot) => {
+              return getDownloadURL(snapshot.ref); // Get the download URL
+            })
+            .then((downloadURL) => {
+              newImageUrls.push(downloadURL); // Add the download URL to the array
+            })
+            .catch((err) => {
+              console.error(err);
+            });
+
+          uploadPromises.push(uploadPromise);
+        }
+      }
+
+      // Wait for all uploads to finish and then update the state
+      await Promise.all(uploadPromises);
+      setImageUrls(newImageUrls);
+    }
+  };
+
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      const filesArray = Array.from(event.target.files);
+      // Process each file
+      filesArray.forEach((file) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          // Update the previews state
+          setImagePreviews((prev) => [...prev, reader.result as string]);
+        };
+        reader.readAsDataURL(file);
+      });
+      // Update the fileUpload state
+      setFileUpload(event.target.files);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Placeholder component
+  const ImageUploadPlaceholder = () => {
+    return (
+      <Box
+        maxW={"180px"}
+        w={"full"}
+        bg={"gray.100"}
+        rounded={"md"}
+        overflow={"hidden"}
+        position="relative"
+        h={"180px"}
+        display="flex"
+        flexDirection="column"
+        cursor="pointer"
+        onClick={() => inputRef.current?.click()}
+      >
+        <Flex
+          direction="column"
+          align="center"
+          justify="center"
+          pos={"relative"}
+          h={"180px"}
+        >
+          <Image src={image} boxSize="40px" />
+          <Text fontWeight={500} color="#AEB3B7">
+            Images
+          </Text>
+          <Input
+            type="file"
+            ref={inputRef}
+            multiple
+            onChange={handleFileChange}
+            accept="image/*"
+            style={{ display: "none" }}
+          />
+        </Flex>
+      </Box>
+    );
+  };
+
+  const openPreview = (imageUrl: string) => {
+    const newWindow = window.open("", "_blank");
+    if (newWindow) {
+      newWindow.document.write(`
+          <style>
+            body {
+              margin: 0;
+              padding: 0;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+            }
+            img {
+              max-width: 80%;
+              max-height: 80vh;
+              object-fit: contain;
+            }
+          </style>
+          <img src="${imageUrl}" />
+        `);
+    }
+  };
+
   return (
-    <div className="main-container">
-      <div className="darkmode-false">
-        <div className="heading">
-          <span className="general-information">General Information:</span>
-        </div>
-        <div className="text-field">
-          <span className="name-of-the-pet">Name of the Pet</span>
-          <div className="input-group">
-            <div className="input">
-              <div className="placeholder" />
-            </div>
-          </div>
-        </div>
-        <div className="text-field-1">
-          <span className="type-of-the-pet">Type of the Pet</span>
-          <div className="input-group-2">
-            <div className="input-3">
-              <span className="placeholder-4">e.g. Dog</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-field-5">
-          <span className="breed-species-of-the-pet">
-            Breed/species of the Pet
-          </span>
-          <div className="input-group-6">
-            <div className="input-7">
-              <span className="placeholder-8">e.g. Siberian Husky</span>
-            </div>
-            <input className="input-9" />
-          </div>
-        </div>
-        <div className="text-field-a">
-          <span className="age-of-the-pet">Age of the Pet</span>
-          <div className="input-group-b">
-            <div className="input-c">
-              <span className="placeholder-d">e.g. 3 months</span>
-            </div>
-            <input className="input-e" />
-          </div>
-        </div>
-        <div className="text-field-f">
-          <span className="label">Weight of the Pet (kg)</span>
-          <div className="input-group-10">
-            <div className="input-11">
-              <span className="placeholder-12">e.g. 15.1</span>
-            </div>
-            <input className="input-13" />
-          </div>
-        </div>
-        <div className="select-field">
-          <span className="label-14">Sex of the Pet</span>
-          <div className="input-group-15">
-            <div className="input-16">
-              <span className="placeholder-17">-</span>
-              <div className="icon" />
-            </div>
-            <input className="input-18" />
-          </div>
-        </div>
-        <div className="heading-19">
-          <span className="label-1a">Health:</span>
-        </div>
-        <div className="select-field-1b">
-          <span className="label-1c">Spaying/Neutering</span>
-          <div className="input-group-1d">
-            <div className="input-1e">
-              <span className="placeholder-1f">-</span>
-              <div className="icon-20" />
-            </div>
-            <input className="input-21" />
-          </div>
-        </div>
-        <div className="text-field-22">
-          <span className="label-23">Health Status</span>
-          <button className="button">
-            <div className="input-24">
-              <span className="placeholder-25">
-                e.g. Any known health issues or signs of previous injuries
-              </span>
-            </div>
-          </button>
-        </div>
-        <div className="text-field-26">
-          <span className="label-27">Allergies</span>
-          <div className="input-group-28">
-            <div className="input-29">
-              <span className="placeholder-2a">e.g. Allergies</span>
-            </div>
-            <input className="input-2b" />
-          </div>
-        </div>
-        <div className="text-area-field">
-          <span className="label-2c">Detailed Information</span>
-          <div className="input-group-2d">
-            <div className="input-2e">
-              <span className="placeholder-2f">
-                Provide comprehensive yet relevant information that gives
-                potential adopters a clear picture of the pet's personality,
-                needs, and history. You could include personality overview,
-                daily routine, how the pet interaction with humans and animals,
-                any commands or training the pet has received, favorite
-                activities and toys, a brief background of the pet,
-                adaptability, and any additional needs.
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="group">
-          <div className="group-30">
-            <div className="vector" />
-            <span className="images">Images</span>
-          </div>
-          <div className="rectangle" />
-        </div>
-        <button className="button-31">
-          <span className="label-32">Send message</span>
-        </button>
-      </div>
+    <VStack
+      as="form"
+      onSubmit={handleSubmit}
+      spacing={5}
+      align="stretch"
+      p={6}
+      backgroundColor="white"
+      borderRadius="lg"
+      boxShadow="md"
+    >
+      <Heading size="md">General Information:</Heading>
+      <FormControl isRequired>
+        <FormLabel>Name of the Pet</FormLabel>
+        <Input
+          type="text"
+          value={petName}
+          placeholder="e.g. John"
+          onChange={(e) => setPetName(e.target.value)}
+        />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Type of the Pet</FormLabel>
+        <Input
+          type="text"
+          value={petType}
+          placeholder="e.g. Dog"
+          onChange={(e) => setPetType(e.target.value)}
+        />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Breed/Species of the Pet</FormLabel>
+        <Input
+          type="text"
+          value={petBreed}
+          placeholder="e.g. Siberian Husky"
+          onChange={(e) => setPetBreed(e.target.value)}
+        />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Age of the Pet</FormLabel>
+        <Input
+          type="text"
+          value={petAge}
+          placeholder="e.g. 3 month"
+          onChange={(e) => setPetAge(e.target.value)}
+        />
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Weight of the Pet (kg)</FormLabel>
+        <NumberInput
+          step={0.01}
+          precision={2}
+          value={petWeight}
+          onChange={(valueString) => setPetWeight(valueString)}
+        >
+          <NumberInputField />
+          <NumberInputStepper>
+            <NumberIncrementStepper />
+            <NumberDecrementStepper />
+          </NumberInputStepper>
+        </NumberInput>
+      </FormControl>
+      <FormControl isRequired>
+        <FormLabel>Sex of the Pet</FormLabel>
+        <Select
+          value={petSex}
+          placeholder="please select an option"
+          onChange={(e) => setPetSex(e.target.value)}
+        >
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </Select>
+      </FormControl>
 
-      <div className="dark-mode">
-        <div className="heading-33">
-          <span className="label-34">General Information:</span>
-        </div>
-        <div className="text-field-35">
-          <span className="label-36">Name of the Pet</span>
-          <div className="input-group-37">
-            <div className="input-38">
-              <span className="placeholder-39">e.g. John</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-field-3a">
-          <span className="label-3b">Type of the Pet</span>
-          <div className="input-group-3c">
-            <div className="input-3d">
-              <span className="placeholder-text">e.g. Dog</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-field-3e">
-          <span className="label-text">Breed/species of the Pet</span>
-          <div className="input-group-3f">
-            <div className="input-40">
-              <span className="placeholder-text-41">e.g. Siberian Husky</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-field-42">
-          <span className="label-text-43">Age of the Pet</span>
-          <div className="input-group-44">
-            <div className="input-45">
-              <span className="placeholder-text-46">e.g. 3 months</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-field-47">
-          <span className="label-text-48">Weight of the Pet (kg)</span>
-          <div className="input-group-49">
-            <div className="input-4a">
-              <span className="placeholder-text-4b">e.g. 15.1</span>
-            </div>
-          </div>
-        </div>
-        <div className="select-field-4c">
-          <span className="label-text-4d">Sex of the Pet</span>
-          <div className="input-group-4e">
-            <div className="input-4f">
-              <span className="placeholder-text-50">-</span>
-              <div className="lock-icon" />
-            </div>
-          </div>
-        </div>
-        <div className="heading-51">
-          <span className="label-text-52">Health:</span>
-        </div>
-        <div className="select-field-53">
-          <span className="spaying-neutering">Spaying/Neutering</span>
-          <div className="input-group-54">
-            <div className="input-55">
-              <span className="placeholder-56">-</span>
-              <div className="lock-icon-57" />
-            </div>
-          </div>
-        </div>
-        <div className="text-field-58">
-          <span className="health-status">Health Status</span>
-          <button className="input-group-59">
-            <div className="input-5a">
-              <span className="placeholder-5b">
-                e.g. Any known health issues or signs of previous injuries
-              </span>
-            </div>
-          </button>
-        </div>
-        <div className="text-field-5c">
-          <span className="allergies">Allergies</span>
-          <button className="input-group-5d">
-            <div className="input-5e">
-              <span className="placeholder-5f">e.g. Allergies</span>
-            </div>
-          </button>
-        </div>
-        <div className="text-area-field-60">
-          <span className="detailed-information">Detailed Information</span>
-          <div className="input-group-61">
-            <div className="input-62">
-              <span className="placeholder-63">
-                Provide comprehensive yet relevant information that gives
-                potential adopters a clear picture of the pet's personality,
-                needs, and history. You could include personality overview,
-                daily routine, how the pet interaction with humans and animals,
-                any commands or training the pet has received, favorite
-                activities and toys, a brief background of the pet,
-                adaptability, and any additional needs.
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="group-64">
-          <div className="group-65">
-            <div className="vector-66" />
-            <span className="images-67">Images</span>
-          </div>
-          <div className="rectangle-68" />
-        </div>
-        <button className="button-69">
-          <span className="send-message">Send message</span>
-        </button>
-      </div>
-    </div>
+      <Heading size="md">Health:</Heading>
+      <FormControl isRequired>
+        <FormLabel>Spaying/Neutering</FormLabel>
+        <Select
+          value={isSpayed}
+          placeholder="please select an option"
+          onChange={(e) => setIsSpayed(e.target.value)}
+        >
+          <option value="true">True</option>
+          <option value="false">False</option>
+        </Select>
+      </FormControl>
+      <FormControl>
+        <FormLabel>Health Status</FormLabel>
+        <Input
+          type="text"
+          value={petHealth}
+          placeholder="e.g. Any known health issues or signs of previous injuries"
+          onChange={(e) => setPetHealth(e.target.value)}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Allergies</FormLabel>
+        <Input
+          type="text"
+          value={allergy}
+          placeholder="e.g. Allergies"
+          onChange={(e) => setAllergy(e.target.value)}
+        />
+      </FormControl>
+      <FormControl>
+        <FormLabel>Detailed Information</FormLabel>
+        <Textarea
+          value={detail}
+          placeholder="Provide comprehensive yet relevant information that gives potential adopters a clear picture of the pet's personality, needs, and history. You could include personality overview, daily routine, how the pet interaction with humans and animals, any commands or training the pet has received, favorite activities and toys, a brief background of the pet, adaptability, and any additional needs."
+          onChange={(e) => setDetail(e.target.value)}
+        />
+      </FormControl>
+      <Flex
+        wrap="wrap"
+        gap={4}
+        align="stretch"
+        // justify="content-start"
+        maxW="1024px"
+      >
+        {imagePreviews.map((preview, index) => (
+          <Box key={index} position="relative">
+            <Image
+              src={preview}
+              alt={`Preview ${index}`}
+              boxSize="180px"
+              rounded={"md"}
+              overflow={"hidden"}
+              objectFit="cover"
+              onClick={() => openPreview(preview)}
+            />
+            <CloseButton
+              boxSize={5}
+              position="absolute"
+              right="0"
+              top="0"
+              style={{
+                position: "absolute",
+                top: "0",
+                right: "0",
+                cursor: "pointer",
+                backgroundColor: "rgba(144, 144, 144, 0.5)",
+                borderRadius: "50%",
+              }}
+              onClick={() => removeImage(index)}
+            />
+          </Box>
+        ))}
+        {imagePreviews.length < 12 && <ImageUploadPlaceholder />}
+      </Flex>
+
+      <Button colorScheme="teal" type="submit">
+        Send Message
+      </Button>
+
+      {/* <div>
+    <input
+        type="file"
+        multiple
+        onChange={(e) => {
+        if (e.target.files && e.target.files.length > 0) {
+            setFileUpload(e.target.files);
+        }
+        }}
+    />
+    <button onClick={uploadFiles}>Upload File</button>
+    </div> */}
+    </VStack>
   );
-}
+};
+
+export default CreatePetInfo;
