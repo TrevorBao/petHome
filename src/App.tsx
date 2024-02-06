@@ -1,11 +1,14 @@
 // import { useEffect, useState } from "react";
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import Auth from "./components/Auth";
-import CreatePetInfo from "./components/CreatePetInfo";
-import PetCard from "./components/petCard";
+// import usePets from "./hooks/usePets";
+// import CreatePetInfo from "./components/CreatePetInfo";
+// import PetCard from "./components/PetCard";
+import PetGrid from "./components/petGrid";
 // import { db } from "./firebase";
 
 function App() {
+  // const { pets, error, isLoading } = usePets();
   // type Pet = {
   //   id: string;
   //   [key: string]: string;
@@ -71,8 +74,8 @@ function App() {
         </GridItem>
       </Show>
       <GridItem area="main" bg="dodgerblue">
-        <CreatePetInfo />
-        <PetCard />
+        {/* <CreatePetInfo /> */}
+        <PetGrid />
 
         {/* <div>
           {petList.map((pet) => (

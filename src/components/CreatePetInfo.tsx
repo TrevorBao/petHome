@@ -93,9 +93,23 @@ const CreatePetInfo = () => {
       setDetail("");
       setImagePreviews([]);
       setFileUpload(null);
-      //   setImageUrls([]);
+      setImageUrls([]);
+
+      toast({
+        title: "Message sent successfully.",
+        description: "You have sent a pet rehome information.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
     } catch (err) {
-      console.error(err);
+      toast({
+        title: "Message sent failed.",
+        description: `${err}`,
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
