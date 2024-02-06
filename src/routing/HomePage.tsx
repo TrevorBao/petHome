@@ -1,10 +1,11 @@
 // import { useEffect, useState } from "react";
 import { Grid, GridItem, Show } from "@chakra-ui/react";
-import Auth from "./components/Auth";
+// import Auth from "./components/Auth";
+// import Signin from "../components/Signin";
 // import usePets from "./hooks/usePets";
 // import CreatePetInfo from "./components/CreatePetInfo";
 // import PetCard from "./components/PetCard";
-import PetGrid from "./components/petGrid";
+// import PetGrid from "./components/petGrid";
 // import { db } from "./firebase";
 
 function App() {
@@ -65,9 +66,7 @@ function App() {
         md: `"nav nav" "aside main"`,
       }}
     >
-      <GridItem area="nav" bg="coral">
-        <Auth />
-      </GridItem>
+      <GridItem area="nav" bg="coral"></GridItem>
       <Show above="md">
         <GridItem area="aside" bg="gold">
           Aside
@@ -75,7 +74,7 @@ function App() {
       </Show>
       <GridItem area="main" bg="dodgerblue">
         {/* <CreatePetInfo /> */}
-        <PetGrid />
+        {/* <PetGrid /> */}
 
         {/* <div>
           {petList.map((pet) => (
