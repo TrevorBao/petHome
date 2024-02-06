@@ -22,6 +22,8 @@ import {
   Text,
   Flex,
   CloseButton,
+  useToast,
+  Skeleton,
 } from "@chakra-ui/react";
 
 const CreatePetInfo = () => {
@@ -43,10 +45,23 @@ const CreatePetInfo = () => {
 
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
+  // State for tracking image upload progress
+  const [uploadingImages, setUploadingImages] = useState(false);
+  const toast = useToast();
+
   const petCollectionRef = collection(db, "petInfo");
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
+    if (uploadingImages) {
+      toast({
+        title: "Please wait until images are uploaded.",
+        status: "warning",
+        duration: 9000,
+        isClosable: true,
+      });
+      return;
+    }
     try {
       await addDoc(petCollectionRef, {
         name: petName,
@@ -86,6 +101,7 @@ const CreatePetInfo = () => {
 
   const uploadFiles = async () => {
     if (fileUpload) {
+      setUploadingImages(true);
       const uploadPromises = [];
       const newImageUrls = [...imageUrls]; // Copy the current imageUrls
 
@@ -111,6 +127,7 @@ const CreatePetInfo = () => {
       // Wait for all uploads to finish and then update the state
       await Promise.all(uploadPromises);
       setImageUrls(newImageUrls);
+      setUploadingImages(false);
     }
   };
 
@@ -141,13 +158,13 @@ const CreatePetInfo = () => {
   const ImageUploadPlaceholder = () => {
     return (
       <Box
-        maxW={"180px"}
+        maxW={"165px"}
         w={"full"}
         bg={"gray.100"}
         rounded={"md"}
         overflow={"hidden"}
         position="relative"
-        h={"180px"}
+        h={"165px"}
         display="flex"
         flexDirection="column"
         cursor="pointer"
@@ -158,7 +175,7 @@ const CreatePetInfo = () => {
           align="center"
           justify="center"
           pos={"relative"}
-          h={"180px"}
+          h={"165px"}
         >
           <Image src={image} boxSize="40px" />
           <Text fontWeight={500} color="#AEB3B7">
@@ -323,15 +340,17 @@ const CreatePetInfo = () => {
       >
         {imagePreviews.map((preview, index) => (
           <Box key={index} position="relative">
-            <Image
-              src={preview}
-              alt={`Preview ${index}`}
-              boxSize="180px"
-              rounded={"md"}
-              overflow={"hidden"}
-              objectFit="cover"
-              onClick={() => openPreview(preview)}
-            />
+            <Skeleton isLoaded={!uploadingImages}>
+              <Image
+                src={preview}
+                alt={`Preview ${index}`}
+                boxSize="165px"
+                rounded={"md"}
+                overflow={"hidden"}
+                objectFit="cover"
+                onClick={() => openPreview(preview)}
+              />
+            </Skeleton>
             <CloseButton
               boxSize={5}
               position="absolute"
