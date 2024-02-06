@@ -21,7 +21,6 @@ const PetCard = ({ pet }: Props) => {
       <Card
         borderRadius="lg"
         overflow="hidden"
-        borderWidth="1px"
         backgroundColor="white"
         padding={5}
         m={4}
@@ -39,10 +38,10 @@ const PetCard = ({ pet }: Props) => {
           <Heading size="lg">{pet.breed}</Heading>
           <Text>{pet.age}</Text>
           <Text>{pet.name}</Text>
-          <Button variant="solid" colorScheme="blue" width="full" mt="auto">
-            More
-          </Button>
         </CardBody>
+        <Button variant="solid" colorScheme="blue" width="full" mt="auto">
+          More
+        </Button>
       </Card>
     </div>
   );
