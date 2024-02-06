@@ -355,19 +355,6 @@ const CreatePetInfo = () => {
       <Button colorScheme="teal" type="submit">
         Send Message
       </Button>
-
-      {/* <div>
-    <input
-        type="file"
-        multiple
-        onChange={(e) => {
-        if (e.target.files && e.target.files.length > 0) {
-            setFileUpload(e.target.files);
-        }
-        }}
-    />
-    <button onClick={uploadFiles}>Upload File</button>
-    </div> */}
     </VStack>
   );
 };

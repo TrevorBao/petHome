@@ -1,35 +1,20 @@
-// import { useEffect } from "react";
+// import { useEffect, useState } from "react";
 import { Grid, GridItem, Show } from "@chakra-ui/react";
 import Auth from "./components/Auth";
 import CreatePetInfo from "./components/CreatePetInfo";
+import PetCard from "./components/petCard";
 // import { db } from "./firebase";
-// import { collection, onSnapshot } from "firebase/firestore";
 
 function App() {
-  // const [petList, setPetList] = useState<Pet[]>([]);
+  // type Pet = {
+  //   id: string;
+  //   [key: string]: string;
+  // };
 
   // Update Pet Info
   // const [updatedPetName, setUpdatedPetName] = useState("");
 
   // const petCollectionRef = collection(db, "petInfo");
-
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(
-  //     petCollectionRef,
-  //     (snapshot) => {
-  //       const pets: Pet[] = snapshot.docs.map((doc) => ({
-  //         ...(doc.data() as Pet),
-  //         id: doc.id,
-  //       }));
-  //       setPetList(pets);
-  //     },
-  //     (err) => {
-  //       console.error(err);
-  //     }
-  //   );
-
-  //   return () => unsubscribe();
-  // }, []);
 
   // const deletePet = async (id: string) => {
   //   if (!auth.currentUser) {
@@ -87,12 +72,12 @@ function App() {
       </Show>
       <GridItem area="main" bg="dodgerblue">
         <CreatePetInfo />
+        <PetCard />
+
         {/* <div>
           {petList.map((pet) => (
             <div key={pet.id}>
-              <h1>{pet.name}</h1>
-              <p>{pet.type}</p>
-              <p>{pet.breed}</p>
+
 
               <button onClick={() => deletePet(pet.id)}>Delete</button>
 
