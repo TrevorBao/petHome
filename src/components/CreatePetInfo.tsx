@@ -41,8 +41,8 @@ const CreatePetInfo = () => {
   const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   // File Upload State
+  const MAX_FILES = 12;
   const [fileUpload, setFileUpload] = useState<FileList | null>(null);
-
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
 
   // State for tracking image upload progress
@@ -134,8 +134,19 @@ const CreatePetInfo = () => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) {
-      const filesArray = Array.from(event.target.files);
+    const files = event.target.files;
+
+    if (files && files.length > MAX_FILES) {
+      toast({
+        title: `You can only upload up to ${MAX_FILES} images.`,
+        status: "warning",
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (files) {
+      const filesArray = Array.from(files);
       // Process each file
       filesArray.forEach((file) => {
         const reader = new FileReader();
@@ -146,7 +157,7 @@ const CreatePetInfo = () => {
         reader.readAsDataURL(file);
       });
       // Update the fileUpload state
-      setFileUpload(event.target.files);
+      setFileUpload(files);
     }
   };
 
