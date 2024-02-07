@@ -34,7 +34,7 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { FirebaseError } from "firebase/app";
-import { getDownloadURL, ref } from "firebase/storage";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { addDoc, collection } from "firebase/firestore";
 
 const SignUp = () => {
@@ -50,14 +50,15 @@ const SignUp = () => {
     gender: "",
     birthday: "",
     job: "",
-    avatarUrl: "",
   });
   const [tabIndex, setTabIndex] = useState(0);
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
+  const [view, setView] = useState(false);
 
   const handleClick = () => setShow(!show);
+  const handleClick2 = () => setView(!view);
 
   const toast = useToast();
 
@@ -87,6 +88,30 @@ const SignUp = () => {
   };
 
   const userCollectionRef = collection(db, "userInfo");
+
+  const uploadAvatar = async () => {
+    try {
+      const defaultAvatarPath =
+        "gs://pet-home-1c0a2.appspot.com/avatar-default.png";
+      const avatarRef = ref(storage, defaultAvatarPath);
+      const url = await getDownloadURL(avatarRef);
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const newAvatarPath = `users/${auth?.currentUser?.uid}/avatar-${userDetails.username}-${auth?.currentUser?.uid}.png`;
+      const newAvatarRef = ref(storage, newAvatarPath);
+      const snapshot = await uploadBytes(newAvatarRef, blob);
+      const newUrl = await getDownloadURL(snapshot.ref);
+      return newUrl;
+    } catch (error) {
+      toast({
+        title: "Avatar Setting Error",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
 
   const signUp = async () => {
     // Check if all required fields are filled
@@ -136,17 +161,15 @@ const SignUp = () => {
       );
       await sendEmailVerification(userCredential.user);
 
-      const defaultAvatarPath =
-        "gs://pet-home-1c0a2.appspot.com/avatar-default.png";
-      const avatarRef = ref(storage, defaultAvatarPath);
+      const avatarUrl = await uploadAvatar();
 
-      await getDownloadURL(avatarRef).then((url) => {
-        setUserDetails({ ...userDetails, avatarUrl: url });
-      });
+      if (!avatarUrl) {
+        throw new Error("Failed to upload avatar and get URL");
+      }
 
       await addDoc(userCollectionRef, {
         address: userDetails.address,
-        avatarUrl: userDetails.avatarUrl,
+        avatarUrl: avatarUrl,
         birthday: userDetails.birthday,
         email: userDetails.email,
         firstName: userDetails.firstName,
@@ -234,14 +257,14 @@ const SignUp = () => {
                 <FormLabel>Confirm Password</FormLabel>
                 <InputGroup>
                   <Input
-                    type={show ? "text" : "password"}
+                    type={view ? "text" : "password"}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     placeholder="Confirm your password"
                   />
                   <InputRightElement width="4.5rem">
-                    <Button h="1.75rem" size="sm" onClick={handleClick}>
-                      {show ? <ViewOffIcon /> : <ViewIcon />}
+                    <Button h="1.75rem" size="sm" onClick={handleClick2}>
+                      {view ? <ViewOffIcon /> : <ViewIcon />}
                     </Button>
                   </InputRightElement>
                 </InputGroup>

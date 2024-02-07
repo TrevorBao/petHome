@@ -5,6 +5,7 @@ import {
   Link,
   Button,
   useDisclosure,
+  Avatar,
 } from "@chakra-ui/react";
 import { Link as ReactRouterLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
@@ -80,9 +81,9 @@ const NavBar = () => {
       <Flex align="center">
         {user ? (
           <>
-            <Link as={ReactRouterLink} to="/">
+            <Avatar as={ReactRouterLink} to="/">
               Profile
-            </Link>
+            </Avatar>
             <Button mx={2} onClick={logout}>
               Log out
             </Button>
