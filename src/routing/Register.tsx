@@ -1,12 +1,12 @@
 import { Center } from "@chakra-ui/react";
-import SignIn from "../components/SignIn";
+import SignUp from "../components/SignUp";
 
-const Auth = () => {
+const Register = () => {
   return (
     <Center h="100vh" bg="gray.50">
-      <SignIn />
+      <SignUp />
     </Center>
   );
 };
 
-export default Auth;
+export default Register;

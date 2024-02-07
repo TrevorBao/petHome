@@ -1,51 +1,53 @@
 import { useState } from "react";
-import { auth, googleprovider } from "../firebase";
+import { auth } from "../firebase";
 import logoWithText from "../assets/logowithtext.svg";
 import {
-  browserLocalPersistence,
+  createUserWithEmailAndPassword,
   browserSessionPersistence,
   setPersistence,
-  signInWithEmailAndPassword,
-  signInWithPopup,
+  sendEmailVerification,
 } from "firebase/auth";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { Box, Link as ChakraLink, Flex, Icon } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import {
   VStack,
   FormControl,
   FormLabel,
   Input,
   Button,
-  Checkbox,
   Image,
-  Text,
   Heading,
   useToast,
   Center,
   Card,
-  HStack,
+  Text,
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { FcGoogle } from "react-icons/fc";
+import { FirebaseError } from "firebase/app";
 
-const SignIn = () => {
+const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const navigate = useNavigate();
 
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
-  const [rememberMe, setRememberMe] = useState(false);
-
   const toast = useToast();
 
-  const handleAuthError = () => {
+  const handleAuthError = (error: unknown) => {
+    let message;
+    if (error instanceof FirebaseError) {
+      message = error.message;
+    } else if (error instanceof Error) {
+      message = error.message;
+    }
     toast({
-      title: "Sign In Failed",
-      description: "Invalid Email or Password",
+      title: "Authentication Error",
+      description: message,
       status: "error",
       duration: 3000,
       isClosable: true,
@@ -56,29 +58,37 @@ const SignIn = () => {
     navigate("/");
   };
 
-  const SignIn = async () => {
-    try {
-      const persistence = rememberMe
-        ? browserLocalPersistence
-        : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess();
-    } catch (err) {
-      handleAuthError();
+  const signUp = async () => {
+    if (password !== confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "The passwords do not match.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
     }
-  };
 
-  const SignInWithGoogle = async () => {
     try {
-      const persistence = rememberMe
-        ? browserLocalPersistence
-        : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithPopup(auth, googleprovider);
+      await setPersistence(auth, browserSessionPersistence);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await sendEmailVerification(userCredential.user);
+      toast({
+        title: "Verify Email",
+        description:
+          "A verification email has been sent to your email address.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
       handleAuthSuccess();
     } catch (err) {
-      handleAuthError();
+      handleAuthError(err);
     }
   };
 
@@ -98,7 +108,7 @@ const SignIn = () => {
           <Image src={logoWithText} boxSize="20" />
         </Center>
         <Heading size="lg" textAlign="center" w="full">
-          Welcome back!
+          Join Us!
         </Heading>
         <FormControl id="email" isRequired>
           <FormLabel>Email</FormLabel>
@@ -125,36 +135,28 @@ const SignIn = () => {
             </InputRightElement>
           </InputGroup>
         </FormControl>
-        <HStack justify="space-between" width="full">
-          <Checkbox
-            colorScheme="teal"
-            onChange={(e) => setRememberMe(e.target.checked)}
-          >
-            Remember me
-          </Checkbox>
-          <Button
-            colorScheme="teal"
-            textAlign="right"
-            variant="link"
-            _hover={{ color: "teal.700", textDecoration: "none" }}
-            onClick={() => navigate("/auth/reset")}
-          >
-            Forgot password
-          </Button>
-        </HStack>
-        <Button colorScheme="teal" w="full" onClick={SignIn}>
-          Sign In
-        </Button>
-        <Button colorScheme="gray" w="full" onClick={SignInWithGoogle}>
-          <Flex justify="space-between" align="center" w="full">
-            <Icon as={FcGoogle} boxSize={5} />
-            <Text>Sign In With Google</Text>
-            <Box> </Box>
-          </Flex>
+        <FormControl id="confirmPassword" isRequired>
+          <FormLabel>Confirm Password</FormLabel>
+          <InputGroup>
+            <Input
+              type={show ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm your password"
+            />
+            <InputRightElement width="4.5rem">
+              <Button h="1.75rem" size="sm" onClick={handleClick}>
+                {show ? <ViewOffIcon /> : <ViewIcon />}
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+        </FormControl>
+        <Button colorScheme="teal" w="full" mt={3} onClick={signUp}>
+          Sign Up
         </Button>
         <VStack spacing={1} align="stretch" w="100%">
           <Text mt={6} fontSize="sm" align="center">
-            Don't have an account?
+            Already have an account?
           </Text>
 
           <ChakraLink
@@ -162,9 +164,9 @@ const SignIn = () => {
             color="teal"
             textAlign="center"
             fontWeight="bold"
-            to="/auth/register"
+            to="/auth"
           >
-            Sign up
+            Sign In
           </ChakraLink>
         </VStack>
       </VStack>
@@ -172,4 +174,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;

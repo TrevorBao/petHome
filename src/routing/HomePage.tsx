@@ -3,9 +3,8 @@ import { Grid, GridItem, Show } from "@chakra-ui/react";
 // import Auth from "./components/Auth";
 // import Signin from "../components/Signin";
 // import usePets from "./hooks/usePets";
-// import CreatePetInfo from "./components/CreatePetInfo";
-// import PetCard from "./components/PetCard";
-// import PetGrid from "./components/petGrid";
+// import CreatePetInfo from "../components/CreatePetInfo";
+import PetGrid from "../components/PetGrid";
 // import { db } from "./firebase";
 
 function App() {
@@ -74,7 +73,7 @@ function App() {
       </Show>
       <GridItem area="main" bg="dodgerblue">
         {/* <CreatePetInfo /> */}
-        {/* <PetGrid /> */}
+        <PetGrid />
 
         {/* <div>
           {petList.map((pet) => (
