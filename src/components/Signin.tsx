@@ -143,7 +143,7 @@ const SignIn = () => {
           </Button>
         </HStack>
         <Button colorScheme="teal" w="full" onClick={SignIn}>
-          Sign In
+          Log In
         </Button>
         <Button colorScheme="gray" w="full" onClick={SignInWithGoogle}>
           <Flex justify="space-between" align="center" w="full">

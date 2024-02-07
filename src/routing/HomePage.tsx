@@ -5,6 +5,7 @@ import { Grid, GridItem, Show } from "@chakra-ui/react";
 // import usePets from "./hooks/usePets";
 // import CreatePetInfo from "../components/CreatePetInfo";
 import PetGrid from "../components/PetGrid";
+import NavBar from "../components/NavBar";
 // import { db } from "./firebase";
 
 function App() {
@@ -65,7 +66,9 @@ function App() {
         md: `"nav nav" "aside main"`,
       }}
     >
-      <GridItem area="nav" bg="coral"></GridItem>
+      <GridItem area="nav" bg="coral">
+        <NavBar />
+      </GridItem>
       <Show above="md">
         <GridItem area="aside" bg="gold">
           Aside

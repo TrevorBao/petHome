@@ -166,7 +166,7 @@ const SignUp = () => {
             fontWeight="bold"
             to="/auth"
           >
-            Sign In
+            Log In
           </ChakraLink>
         </VStack>
       </VStack>
