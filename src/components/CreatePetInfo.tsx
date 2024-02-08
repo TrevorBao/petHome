@@ -33,6 +33,7 @@ import {
   useToast,
   Skeleton,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 
 const CreatePetInfo = () => {
   // Create new Pet Info
@@ -55,6 +56,7 @@ const CreatePetInfo = () => {
   // State for tracking image upload progress
   const [uploadingImages, setUploadingImages] = useState(false);
   const toast = useToast();
+  const navigate = useNavigate();
 
   const petCollectionRef = collection(db, "petInfo");
   const userCollectionRef = collection(db, "userInfo");
@@ -176,6 +178,8 @@ const CreatePetInfo = () => {
         duration: 9000,
         isClosable: true,
       });
+
+      navigate("/");
     } catch (err) {
       toast({
         title: "Message sent failed.",

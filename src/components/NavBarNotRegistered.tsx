@@ -14,7 +14,7 @@ const NavBarNotRegistered = () => {
       padding=".5rem"
       bg="white"
       color="black"
-      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)"
+      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.008)"
     >
       <Flex align="center" mr={5} ml={2}>
         <CustomNavLink to="/">
