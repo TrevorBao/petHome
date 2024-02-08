@@ -1,7 +1,7 @@
 import { Center } from "@chakra-ui/react";
 import SignIn from "../components/SignIn";
 
-const Auth = () => {
+const LogInPage = () => {
   return (
     <Center minH="100vh" bg="gray.50">
       <SignIn />
@@ -9,4 +9,4 @@ const Auth = () => {
   );
 };
 
-export default Auth;
+export default LogInPage;

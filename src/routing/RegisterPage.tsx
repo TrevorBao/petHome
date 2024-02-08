@@ -1,7 +1,7 @@
 import { Center } from "@chakra-ui/react";
 import SignUp from "../components/SignUp";
 
-const Register = () => {
+const RegisterPage = () => {
   return (
     <Center minH="100vh" bg="gray.50">
       <SignUp />
@@ -9,4 +9,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default RegisterPage;

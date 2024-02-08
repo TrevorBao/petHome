@@ -3,7 +3,6 @@ import {
   Flex,
   Box,
   Image,
-  Link,
   Button,
   Avatar,
   Menu,
@@ -12,11 +11,12 @@ import {
   MenuItem,
   MenuGroup,
 } from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
 import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { NavLink as ReactRouterLink } from "react-router-dom";
+import CustomNavLink from "./CustomNavLink";
 
 const NavBarSignIn = () => {
   const [avatarUrl, setAvatarUrl] = useState("");
@@ -60,9 +60,9 @@ const NavBarSignIn = () => {
       boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.16)"
     >
       <Flex align="center" mr={5} ml={2}>
-        <Link as={ReactRouterLink} to="/">
+        <CustomNavLink to="/">
           <Image src={logo} boxSize="32px" alt="Logo" />
-        </Link>
+        </CustomNavLink>
       </Flex>
 
       <Box
@@ -71,15 +71,15 @@ const NavBarSignIn = () => {
         alignItems="center"
         flexGrow={1}
       >
-        <Link as={ReactRouterLink} to="/" px={2}>
+        <CustomNavLink to="/" px={2}>
           Home
-        </Link>
-        <Link as={ReactRouterLink} to="/" px={2}>
+        </CustomNavLink>
+        <CustomNavLink to="/auth" px={2}>
           Adoption
-        </Link>
-        <Link as={ReactRouterLink} to="/" px={2}>
+        </CustomNavLink>
+        <CustomNavLink to="/auth" px={2}>
           Chat
-        </Link>
+        </CustomNavLink>
       </Box>
 
       <Flex align="center" mr={2}>

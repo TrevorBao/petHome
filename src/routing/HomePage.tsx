@@ -1,11 +1,9 @@
 // import { useEffect, useState } from "react";
-import { Grid, GridItem, Show } from "@chakra-ui/react";
 // import Auth from "./components/Auth";
 // import Signin from "../components/Signin";
 // import usePets from "./hooks/usePets";
 // import CreatePetInfo from "../components/CreatePetInfo";
 import PetGrid from "../components/PetGrid";
-import NavBar from "../components/NavBar";
 // import { db } from "./firebase";
 
 function App() {
@@ -60,42 +58,26 @@ function App() {
   // };
 
   return (
-    <Grid
-      templateAreas={{
-        base: `"nav nav" "main main"`,
-        md: `"nav nav" "aside main"`,
-      }}
-    >
-      <GridItem area="nav" bg="coral">
-        <NavBar />
-      </GridItem>
-      <Show above="md">
-        <GridItem area="aside" bg="gold">
-          Aside
-        </GridItem>
-      </Show>
-      <GridItem area="main" bg="dodgerblue">
-        {/* <CreatePetInfo /> */}
-        <PetGrid />
+    <>
+      <PetGrid />
 
-        {/* <div>
-          {petList.map((pet) => (
-            <div key={pet.id}>
+      {/* <div>
+  {petList.map((pet) => (
+    <div key={pet.id}>
 
 
-              <button onClick={() => deletePet(pet.id)}>Delete</button>
+      <button onClick={() => deletePet(pet.id)}>Delete</button>
 
-              <input
-                type="text"
-                placeholder={pet.name}
-                onChange={(e) => setUpdatedPetName(e.target.value)}
-              />
-              <button onClick={() => updatePetName(pet.id)}>Update</button>
-            </div>
-          ))}
-        </div> */}
-      </GridItem>
-    </Grid>
+      <input
+        type="text"
+        placeholder={pet.name}
+        onChange={(e) => setUpdatedPetName(e.target.value)}
+      />
+      <button onClick={() => updatePetName(pet.id)}>Update</button>
+    </div>
+  ))}
+</div> */}
+    </>
   );
 }
 

@@ -1,13 +1,7 @@
-import {
-  Flex,
-  Box,
-  Image,
-  Link,
-  Button,
-  useDisclosure,
-} from "@chakra-ui/react";
-import { Link as ReactRouterLink } from "react-router-dom";
+import { Flex, Box, Image, Button, useDisclosure } from "@chakra-ui/react";
+import { NavLink as ReactRouterLink } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import CustomNavLink from "./CustomNavLink";
 
 const NavBarNotRegistered = () => {
   const { onOpen } = useDisclosure();
@@ -23,9 +17,9 @@ const NavBarNotRegistered = () => {
       boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.16)"
     >
       <Flex align="center" mr={5} ml={2}>
-        <Link as={ReactRouterLink} to="/">
+        <CustomNavLink to="/">
           <Image src={logo} boxSize="32px" alt="Logo" />
-        </Link>
+        </CustomNavLink>
       </Flex>
 
       <Box
@@ -34,9 +28,9 @@ const NavBarNotRegistered = () => {
         alignItems="center"
         flexGrow={1}
       >
-        <Link as={ReactRouterLink} to="/" px={2}>
+        <CustomNavLink to="/" px={2}>
           Home
-        </Link>
+        </CustomNavLink>
 
         <Box display={{ md: "none" }} onClick={onOpen}></Box>
       </Box>

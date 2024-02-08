@@ -1,7 +1,7 @@
 import { Center } from "@chakra-ui/react";
 import PasswordRest from "../components/PasswordReset";
 
-const ResetPassword = () => {
+const ResetPasswordPage = () => {
   return (
     <Center minH="100vh" bg="gray.50">
       <PasswordRest />
@@ -9,4 +9,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ResetPasswordPage;
