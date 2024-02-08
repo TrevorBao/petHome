@@ -1,7 +1,15 @@
 import { useRef, useState } from "react";
 import { db, auth, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 import image from "../assets/uploadImage.svg";
 import {
   FormControl,
@@ -38,7 +46,6 @@ const CreatePetInfo = () => {
   const [petHealth, setPetHealth] = useState("");
   const [allergy, setAllergy] = useState("");
   const [detail, setDetail] = useState("");
-  const [imageUrls, setImageUrls] = useState<string[]>([]);
 
   // File Upload State
   const MAX_FILES = 12;
@@ -50,6 +57,43 @@ const CreatePetInfo = () => {
   const toast = useToast();
 
   const petCollectionRef = collection(db, "petInfo");
+  const userCollectionRef = collection(db, "userInfo");
+  const userDocRef = query(
+    userCollectionRef,
+    where("userId", "==", auth?.currentUser?.uid)
+  );
+
+  const uploadFiles = async () => {
+    if (fileUpload) {
+      setUploadingImages(true);
+      const newImageUrls = [];
+
+      // Create an array of promises for the upload tasks
+      const uploadPromises = Array.from(fileUpload).map((file) => {
+        const fileFolderRef = ref(storage, `users/${file.name}`);
+        return uploadBytes(fileFolderRef, file).then((snapshot) =>
+          getDownloadURL(snapshot.ref)
+        );
+      });
+
+      try {
+        // Wait for all uploads to finish
+        const downloadURLs = await Promise.all(uploadPromises);
+        newImageUrls.push(...downloadURLs);
+        return newImageUrls;
+      } catch (err) {
+        toast({
+          title: "Upload Error",
+          description: err.message,
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      } finally {
+        setUploadingImages(false);
+      }
+    }
+  };
 
   const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -57,13 +101,13 @@ const CreatePetInfo = () => {
       toast({
         title: "Please wait until images are uploaded.",
         status: "warning",
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
       return;
     }
     try {
-      await addDoc(petCollectionRef, {
+      const petDocRef = await addDoc(petCollectionRef, {
         name: petName,
         breed: petBreed,
         type: petType,
@@ -74,11 +118,42 @@ const CreatePetInfo = () => {
         health: petHealth,
         detail: detail,
         allergy: allergy,
-        imageUrls: imageUrls,
         userId: auth?.currentUser?.uid,
       });
 
-      uploadFiles();
+      const newImageUrls = (await uploadFiles()) || [];
+
+      if (!newImageUrls) {
+        toast({
+          title: "Upload Error",
+          description: "Failed to upload images",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+
+      await updateDoc(petDocRef, {
+        imageUrls: arrayUnion(...newImageUrls),
+      });
+
+      // Check if the petRefs field exists and is an array
+      const userDocSnap = await getDocs(userDocRef);
+      if (!userDocSnap.empty) {
+        const userDocData = userDocSnap.docs[0].data();
+        const userDocRef = userDocSnap.docs[0].ref;
+        if (Array.isArray(userDocData.petRefs)) {
+          // If petRefs exists, use arrayUnion to add the new petDocRef.id
+          await updateDoc(userDocRef, {
+            petRefs: arrayUnion(`/petInfo/${petDocRef.id}`),
+          });
+        } else {
+          // If petRefs does not exist, set it as a new array with the new petDocRef.id
+          await updateDoc(userDocRef, {
+            petRefs: [`/petInfo/${petDocRef.id}`],
+          });
+        }
+      }
 
       // Reset form and image states
       setPetName("");
@@ -93,7 +168,6 @@ const CreatePetInfo = () => {
       setDetail("");
       setImagePreviews([]);
       setFileUpload(null);
-      setImageUrls([]);
 
       toast({
         title: "Message sent successfully.",
@@ -110,38 +184,6 @@ const CreatePetInfo = () => {
         duration: 9000,
         isClosable: true,
       });
-    }
-  };
-
-  const uploadFiles = async () => {
-    if (fileUpload) {
-      setUploadingImages(true);
-      const uploadPromises = [];
-      const newImageUrls = [...imageUrls]; // Copy the current imageUrls
-
-      for (let i = 0; i < fileUpload.length; i++) {
-        const file = fileUpload.item(i);
-        if (file) {
-          const fileFolderRef = ref(storage, `users/${file.name}`);
-          const uploadPromise = uploadBytes(fileFolderRef, file)
-            .then((snapshot) => {
-              return getDownloadURL(snapshot.ref); // Get the download URL
-            })
-            .then((downloadURL) => {
-              newImageUrls.push(downloadURL); // Add the download URL to the array
-            })
-            .catch((err) => {
-              console.error(err);
-            });
-
-          uploadPromises.push(uploadPromise);
-        }
-      }
-
-      // Wait for all uploads to finish and then update the state
-      await Promise.all(uploadPromises);
-      setImageUrls(newImageUrls);
-      setUploadingImages(false);
     }
   };
 
@@ -253,6 +295,7 @@ const CreatePetInfo = () => {
       backgroundColor="white"
       borderRadius="lg"
       boxShadow="md"
+      width="full"
     >
       <Heading size="md">General Information:</Heading>
       <FormControl isRequired>

@@ -57,7 +57,7 @@ const NavBarSignIn = () => {
       padding="0.6rem"
       bg="white"
       color="black"
-      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.16)"
+      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04)"
     >
       <Flex align="center" mr={5} ml={2}>
         <CustomNavLink to="/">
@@ -97,6 +97,9 @@ const NavBarSignIn = () => {
             <MenuGroup title={`Hi, ${username}!`}>
               <MenuItem as={ReactRouterLink} to="/">
                 Profile
+              </MenuItem>
+              <MenuItem as={ReactRouterLink} to="/addPet">
+                Rehome
               </MenuItem>
               <MenuItem onClick={logout}>Log out</MenuItem>
             </MenuGroup>

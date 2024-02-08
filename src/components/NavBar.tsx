@@ -3,7 +3,9 @@ import NavBarNotRegistered from "./NavBarNotRegistered";
 import useAuth from "../routing/hooks/useAuth";
 
 const NavBar = () => {
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+
+  if (loading) return;
 
   return <>{user ? <NavBarSignIn /> : <NavBarNotRegistered />}</>;
 };
