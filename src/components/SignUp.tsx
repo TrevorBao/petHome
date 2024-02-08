@@ -202,9 +202,9 @@ const SignUp = () => {
       p={6}
       rounded="lg"
       boxShadow="lg"
-      w="100%"
+      w="full"
       maxW="xl"
-      padding={50}
+      padding="40px"
       margin={10}
     >
       <Tabs isFitted index={tabIndex} onChange={(index) => setTabIndex(index)}>
@@ -220,6 +220,7 @@ const SignUp = () => {
               <FormControl id="username" isRequired>
                 <FormLabel>Username</FormLabel>
                 <Input
+                  autoComplete="true"
                   type="text"
                   value={userDetails.username}
                   onChange={handleInputChange}
@@ -230,6 +231,7 @@ const SignUp = () => {
               <FormControl id="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
+                  autoComplete="true"
                   type="email"
                   value={userDetails.email}
                   onChange={handleInputChange}
@@ -319,6 +321,7 @@ const SignUp = () => {
               <FormControl id="address" isRequired>
                 <FormLabel>Address</FormLabel>
                 <Input
+                  autoComplete="true"
                   type="text"
                   value={userDetails.address}
                   onChange={handleInputChange}

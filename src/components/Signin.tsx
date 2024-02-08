@@ -103,6 +103,7 @@ const SignIn = () => {
         <FormControl id="email" isRequired>
           <FormLabel>Email</FormLabel>
           <Input
+            autoComplete="true"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -127,6 +128,7 @@ const SignIn = () => {
         </FormControl>
         <HStack justify="space-between" width="full">
           <Checkbox
+            name="remember"
             colorScheme="teal"
             onChange={(e) => setRememberMe(e.target.checked)}
           >

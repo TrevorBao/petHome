@@ -3,7 +3,7 @@ import SignIn from "../components/SignIn";
 
 const Auth = () => {
   return (
-    <Center h="100vh" bg="gray.50">
+    <Center minH="100vh" bg="gray.50">
       <SignIn />
     </Center>
   );

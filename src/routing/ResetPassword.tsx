@@ -3,7 +3,7 @@ import PasswordRest from "../components/PasswordReset";
 
 const ResetPassword = () => {
   return (
-    <Center h="100vh" bg="gray.50">
+    <Center minH="100vh" bg="gray.50">
       <PasswordRest />
     </Center>
   );

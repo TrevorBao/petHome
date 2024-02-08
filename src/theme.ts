@@ -50,6 +50,16 @@ const theme = extendTheme({
         },
       },
     },
+    Link: {
+      baseStyle: ({
+        fontSize: fontSizes.sm, 
+      }),
+    },
+    Text: {
+      baseStyle: ({
+        fontSize: fontSizes.md, 
+      }),
+    },
   },
 });
 

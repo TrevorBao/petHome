@@ -3,7 +3,7 @@ import SignUp from "../components/SignUp";
 
 const Register = () => {
   return (
-    <Center h="100%" bg="gray.50">
+    <Center minH="100vh" bg="gray.50">
       <SignUp />
     </Center>
   );

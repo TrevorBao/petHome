@@ -6,9 +6,6 @@ import PetCardSkeleton from "./PetCardSkeleton";
 
 const PetGrid = () => {
   const { pets, error, isLoading } = usePets();
-  const skeletons = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-  ];
   const toast = useToast();
 
   if (error) {
@@ -28,14 +25,14 @@ const PetGrid = () => {
       spacing={10}
     >
       {isLoading &&
-        skeletons.map((skeleton) => (
-          <PetCardContainer>
-            <PetCardSkeleton key={skeleton} />
+        Array.from({ length: 21 }, (_, index) => (
+          <PetCardContainer key={index}>
+            <PetCardSkeleton />
           </PetCardContainer>
         ))}
       {pets.map((pet) => (
-        <PetCardContainer>
-          <PetCard key={pet.id} pet={pet} />
+        <PetCardContainer key={pet.id}>
+          <PetCard pet={pet} />
         </PetCardContainer>
       ))}
     </SimpleGrid>
