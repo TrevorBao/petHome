@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -54,13 +54,12 @@ const NavBarSignIn = () => {
       as="nav"
       align="center"
       justify="space-between"
-      padding=".5rem"
+      padding="0.6rem"
       bg="white"
       color="black"
-      boxShadow="sm"
-      mb={4}
+      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.16)"
     >
-      <Flex align="center" mr={5}>
+      <Flex align="center" mr={5} ml={2}>
         <Link as={ReactRouterLink} to="/">
           <Image src={logo} boxSize="32px" alt="Logo" />
         </Link>
@@ -83,7 +82,7 @@ const NavBarSignIn = () => {
         </Link>
       </Box>
 
-      <Flex align="center">
+      <Flex align="center" mr={2}>
         <Menu>
           <MenuButton
             as={Button}

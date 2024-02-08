@@ -20,10 +20,9 @@ const NavBarNotRegistered = () => {
       padding=".5rem"
       bg="white"
       color="black"
-      boxShadow="sm"
-      mb={4}
+      boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.25), 0 2px 4px -1px rgba(0, 0, 0, 0.16)"
     >
-      <Flex align="center" mr={5}>
+      <Flex align="center" mr={5} ml={2}>
         <Link as={ReactRouterLink} to="/">
           <Image src={logo} boxSize="32px" alt="Logo" />
         </Link>
@@ -42,7 +41,7 @@ const NavBarNotRegistered = () => {
         <Box display={{ md: "none" }} onClick={onOpen}></Box>
       </Box>
 
-      <Flex align="center">
+      <Flex align="center" mr={2}>
         <Button
           variant="ghost"
           colorScheme="teal"
