@@ -1,14 +1,5 @@
-import { useState } from "react";
-import { auth, googleprovider } from "../firebase";
 import logoWithText from "../assets/logowithtext.svg";
-import {
-  browserLocalPersistence,
-  browserSessionPersistence,
-  setPersistence,
-  signInWithEmailAndPassword,
-  signInWithPopup,
-} from "firebase/auth";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { Link as ReactRouterLink } from "react-router-dom";
 import { Box, Link as ChakraLink, Flex, Icon } from "@chakra-ui/react";
 import {
   VStack,
@@ -20,7 +11,6 @@ import {
   Image,
   Text,
   Heading,
-  useToast,
   Center,
   Card,
   HStack,
@@ -30,58 +20,31 @@ import {
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { FcGoogle } from "react-icons/fc";
 
-const SignIn = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+interface SignInProps {
+  email: string;
+  setEmail: (value: string) => void;
+  password: string;
+  setPassword: (value: string) => void;
+  setRememberMe: (value: boolean) => void;
+  show: boolean;
+  handleClick: () => void;
+  signIn: () => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
+  handleNavigation: (value: string) => void;
+}
 
-  const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
-
-  const [rememberMe, setRememberMe] = useState(false);
-
-  const toast = useToast();
-
-  const handleAuthError = () => {
-    toast({
-      title: "Sign In Failed",
-      description: "Invalid Email or Password",
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  const handleAuthSuccess = () => {
-    navigate("/");
-  };
-
-  const SignIn = async () => {
-    try {
-      const persistence = rememberMe
-        ? browserLocalPersistence
-        : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithEmailAndPassword(auth, email, password);
-      handleAuthSuccess();
-    } catch (err) {
-      handleAuthError();
-    }
-  };
-
-  const SignInWithGoogle = async () => {
-    try {
-      const persistence = rememberMe
-        ? browserLocalPersistence
-        : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithPopup(auth, googleprovider);
-      handleAuthSuccess();
-    } catch (err) {
-      handleAuthError();
-    }
-  };
-
+const SignIn = ({
+  email,
+  setEmail,
+  password,
+  setPassword,
+  setRememberMe,
+  show,
+  handleClick,
+  signIn,
+  signInWithGoogle,
+  handleNavigation,
+}: SignInProps) => {
   return (
     <Card
       bg="white"
@@ -139,15 +102,15 @@ const SignIn = () => {
             textAlign="right"
             variant="link"
             _hover={{ color: "teal.700", textDecoration: "none" }}
-            onClick={() => navigate("/auth/reset")}
+            onClick={() => handleNavigation("/auth/reset")}
           >
             Forgot password
           </Button>
         </HStack>
-        <Button colorScheme="teal" w="full" onClick={SignIn}>
+        <Button colorScheme="teal" w="full" onClick={signIn}>
           Log In
         </Button>
-        <Button colorScheme="gray" w="full" onClick={SignInWithGoogle}>
+        <Button colorScheme="gray" w="full" onClick={signInWithGoogle}>
           <Flex justify="space-between" align="center" w="full">
             <Icon as={FcGoogle} boxSize={5} />
             <Text>Sign In With Google</Text>

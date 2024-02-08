@@ -6,7 +6,7 @@ const ErrorPage = () => {
   return (
     <Box ml={5} mt={5}>
       <Heading size="3xl" color="red.500">
-        Opps
+        Opps...
       </Heading>
 
       <Stack divider={<StackDivider />} spacing="4">

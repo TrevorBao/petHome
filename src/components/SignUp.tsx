@@ -1,13 +1,5 @@
-import { useState } from "react";
-import { auth, db, storage } from "../firebase";
 import logoWithText from "../assets/logowithtext.svg";
-import {
-  createUserWithEmailAndPassword,
-  browserSessionPersistence,
-  setPersistence,
-  sendEmailVerification,
-} from "firebase/auth";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
+import { Link as ReactRouterLink } from "react-router-dom";
 import {
   Link as ChakraLink,
   Select,
@@ -25,7 +17,6 @@ import {
   Button,
   Image,
   Heading,
-  useToast,
   Center,
   Card,
   Text,
@@ -33,169 +24,39 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { FirebaseError } from "firebase/app";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { addDoc, collection } from "firebase/firestore";
+import { UserDetails } from "../hooks/useSignUp";
 
-const SignUp = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [userDetails, setUserDetails] = useState({
-    username: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    address: "",
-    postCode: "",
-    gender: "",
-    birthday: "",
-    job: "",
-  });
-  const [tabIndex, setTabIndex] = useState(0);
-  const navigate = useNavigate();
+interface SignUpProps {
+  userDetails: UserDetails;
+  password: string;
+  setPassword: (value: string) => void;
+  confirmPassword: string;
+  setConfirmPassword: (value: string) => void;
+  tabIndex: number;
+  setTabIndex: (index: number) => void;
+  show: boolean;
+  view: boolean;
+  handleClick: () => void;
+  handleClick2: () => void;
+  handleInputChange: (event: never) => void;
+  signUp: () => Promise<void>;
+}
 
-  const [show, setShow] = useState(false);
-  const [view, setView] = useState(false);
-
-  const handleClick = () => setShow(!show);
-  const handleClick2 = () => setView(!view);
-
-  const toast = useToast();
-
-  const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setUserDetails({ ...userDetails, [name]: value });
-  };
-
-  const handleAuthError = (error: unknown) => {
-    let message;
-    if (error instanceof FirebaseError) {
-      message = error.message;
-    } else if (error instanceof Error) {
-      message = error.message;
-    }
-    toast({
-      title: "Authentication Error",
-      description: message,
-      status: "error",
-      duration: 3000,
-      isClosable: true,
-    });
-  };
-
-  const handleAuthSuccess = () => {
-    navigate("/");
-  };
-
-  const userCollectionRef = collection(db, "userInfo");
-
-  const uploadAvatar = async () => {
-    try {
-      const defaultAvatarPath =
-        "gs://pet-home-1c0a2.appspot.com/avatar-default.png";
-      const avatarRef = ref(storage, defaultAvatarPath);
-      const url = await getDownloadURL(avatarRef);
-      const response = await fetch(url);
-      const blob = await response.blob();
-      const newAvatarPath = `users/${auth?.currentUser?.uid}/avatar-${userDetails.username}-${auth?.currentUser?.uid}.png`;
-      const newAvatarRef = ref(storage, newAvatarPath);
-      const snapshot = await uploadBytes(newAvatarRef, blob);
-      const newUrl = await getDownloadURL(snapshot.ref);
-      return newUrl;
-    } catch (error) {
-      toast({
-        title: "Avatar Setting Error",
-        description: error.message,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
-  const signUp = async () => {
-    // Check if all required fields are filled
-    const requiredFields = {
-      username: userDetails.username,
-      email: userDetails.email,
-      password: password,
-      confirmPassword: confirmPassword,
-      firstName: userDetails.firstName,
-      lastName: userDetails.lastName,
-      gender: userDetails.gender,
-      birthday: userDetails.birthday,
-      address: userDetails.address,
-      postCode: userDetails.postCode,
-    };
-    const allRequiredFilled = Object.values(requiredFields).every((value) =>
-      value.trim()
-    );
-    if (!allRequiredFilled) {
-      toast({
-        title: "Incomplete Form",
-        description: "Please fill in all the required fields.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast({
-        title: "Password Mismatch",
-        description: "The passwords do not match.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-
-    try {
-      await setPersistence(auth, browserSessionPersistence);
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        userDetails.email,
-        password
-      );
-      await sendEmailVerification(userCredential.user);
-
-      const avatarUrl = await uploadAvatar();
-
-      if (!avatarUrl) {
-        throw new Error("Failed to upload avatar and get URL");
-      }
-
-      await addDoc(userCollectionRef, {
-        address: userDetails.address,
-        avatarUrl: avatarUrl,
-        birthday: userDetails.birthday,
-        email: userDetails.email,
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
-        gender: userDetails.gender,
-        job: userDetails.job,
-        postCode: userDetails.postCode,
-        userName: userDetails.username,
-        userId: auth?.currentUser?.uid,
-      });
-
-      toast({
-        title: "Account Created",
-        description:
-          "Your account has been created successfully. A verification email has been sent to you.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-
-      handleAuthSuccess();
-    } catch (err) {
-      handleAuthError(err);
-    }
-  };
-
+const SignUp = ({
+  userDetails,
+  password,
+  setPassword,
+  confirmPassword,
+  setConfirmPassword,
+  tabIndex,
+  setTabIndex,
+  show,
+  view,
+  handleClick,
+  handleClick2,
+  handleInputChange,
+  signUp,
+}: SignUpProps) => {
   return (
     <Card
       bg="white"

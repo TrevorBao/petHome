@@ -1,9 +1,5 @@
-import { useState } from "react";
 import logoWithText from "../assets/logowithtext.svg";
-import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import { auth } from "../firebase";
-import { sendPasswordResetEmail } from "firebase/auth";
-import { Link as ChakraLink } from "@chakra-ui/react";
+import { Link as ReactRouterLink } from "react-router-dom";
 import {
   VStack,
   FormControl,
@@ -22,36 +18,26 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
-  useToast,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 
-const PasswordRest = () => {
-  const [email, setEmail] = useState("");
+interface PasswordResetProps {
+  email: string;
+  setEmail: React.Dispatch<React.SetStateAction<string>>;
+  handleResetPassword: () => Promise<void>;
+  isOpen: boolean;
+  onClose: () => void;
+  navigate: (path: string) => void;
+}
 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
-  const toast = useToast();
-
-  const handleResetPassword = async () => {
-    try {
-      await sendPasswordResetEmail(auth, email);
-      onOpen();
-    } catch (err) {
-      let errorMessage;
-      if (err instanceof Error) {
-        errorMessage = err.message;
-      }
-      toast({
-        title: "Error Sending Reset Email",
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
-
+const PasswordReset = ({
+  email,
+  setEmail,
+  handleResetPassword,
+  isOpen,
+  onClose,
+  navigate,
+}: PasswordResetProps) => {
   return (
     <>
       <Card
@@ -142,4 +128,4 @@ const PasswordRest = () => {
   );
 };
 
-export default PasswordRest;
+export default PasswordReset;
