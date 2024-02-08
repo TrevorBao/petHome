@@ -31,6 +31,12 @@ const NavBarNotRegistered = () => {
         <CustomNavLink to="/" px={2}>
           Home
         </CustomNavLink>
+        <CustomNavLink to="/auth" px={2}>
+          Adoption
+        </CustomNavLink>
+        <CustomNavLink to="/auth" px={2}>
+          Chat
+        </CustomNavLink>
 
         <Box display={{ md: "none" }} onClick={onOpen}></Box>
       </Box>
