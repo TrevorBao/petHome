@@ -32,7 +32,7 @@ const useSignIn = () => {
   };
 
   const handleAuthSuccess = () => {
-    navigate("/");
+    navigate("/pet");
   };
 
   const handleNavigation = (to: To) => {

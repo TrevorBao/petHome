@@ -179,7 +179,7 @@ const CreatePetInfo = () => {
         isClosable: true,
       });
 
-      navigate("/");
+      navigate("/pet");
     } catch (err) {
       toast({
         title: "Message sent failed.",
@@ -403,13 +403,7 @@ const CreatePetInfo = () => {
           onChange={(e) => setDetail(e.target.value)}
         />
       </FormControl>
-      <Flex
-        wrap="wrap"
-        gap={4}
-        align="stretch"
-        // justify="content-start"
-        maxW="1024px"
-      >
+      <Flex wrap="wrap" gap={4} align="stretch" maxW="1024px">
         {imagePreviews.map((preview, index) => (
           <Box key={index} position="relative">
             <Skeleton isLoaded={!uploadingImages}>

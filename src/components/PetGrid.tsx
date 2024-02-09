@@ -21,8 +21,10 @@ const PetGrid = () => {
   return (
     <SimpleGrid
       columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
-      padding="15px"
+      mt={5}
+      px={{ base: "15px", md: "40px", lg: "50px", xl: "60px" }}
       spacing={10}
+      minH="100vh"
     >
       {isLoading &&
         Array.from({ length: 21 }, (_, index) => (

@@ -7,7 +7,7 @@ const PrivateRoutes = () => {
 
   if (loading) return <Spinner size="xl" />;
 
-  return user ? <Outlet /> : <Navigate to="/auth" />;
+  return user ? <Outlet /> : <Navigate to="/" />;
 };
 
 export default PrivateRoutes;

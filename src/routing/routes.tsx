@@ -12,24 +12,26 @@ const router = createBrowserRouter([
   // path: "/", element: component
   {
     path: "/",
-    element: <Layout />,
-    errorElement: <ErrorPage />,
-    children: [
-      { index: true, element: <HomePage /> },
-      {
-        element: <PrivateRoutes />,
-        errorElement: <ErrorPage />,
-        children: [{ path: "addPet", element: <AddPetPage /> }],
-      },
-    ],
-  },
-  {
-    path: "/auth",
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <LogInPage /> },
       { path: "register", element: <RegisterPage /> },
       { path: "reset", element: <ResetPasswordPage /> },
+    ],
+  },
+  {
+    element: <PrivateRoutes />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "/pet",
+        element: <Layout />,
+        errorElement: <ErrorPage />,
+        children: [
+          { index: true, element: <HomePage /> },
+          { path: "add", element: <AddPetPage /> },
+        ],
+      },
     ],
   },
 ]);

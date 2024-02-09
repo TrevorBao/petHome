@@ -85,7 +85,7 @@ const PasswordReset = ({
               color="teal"
               textAlign="center"
               fontWeight="bold"
-              to="/auth/register"
+              to="/register"
             >
               Sign Up
             </ChakraLink>
@@ -116,7 +116,7 @@ const PasswordReset = ({
             <Button
               variant="ghost"
               onClick={() => {
-                navigate("/auth");
+                navigate("/");
               }}
             >
               Success

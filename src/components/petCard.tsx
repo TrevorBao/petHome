@@ -33,7 +33,6 @@ const PetCard = ({ pet }: Props) => {
             borderRadius="lg"
           />
         </AspectRatio>
-        <Divider />
         <CardBody p={4}>
           <Heading size="lg">{pet.breed}</Heading>
           <Text>{pet.age}</Text>
