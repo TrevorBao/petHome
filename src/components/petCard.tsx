@@ -1,10 +1,10 @@
+import { NavLink } from "react-router-dom";
 import placeholder from "../assets/image-placeholder.jpg";
 import { Pet } from "../hooks/usePets";
 import {
   Image,
   Heading,
   Text,
-  Divider,
   Button,
   AspectRatio,
   Card,
@@ -38,7 +38,14 @@ const PetCard = ({ pet }: Props) => {
           <Text>{pet.age}</Text>
           <Text>{pet.name}</Text>
         </CardBody>
-        <Button variant="solid" colorScheme="blue" width="full" mt="auto">
+        <Button
+          as={NavLink}
+          variant="solid"
+          colorScheme="blue"
+          width="full"
+          mt="auto"
+          to={`/pet/${pet.id}`}
+        >
           More
         </Button>
       </Card>
