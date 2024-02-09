@@ -81,7 +81,6 @@ const SignUp = ({
               <FormControl id="username" isRequired>
                 <FormLabel>Username</FormLabel>
                 <Input
-                  autoComplete="true"
                   type="text"
                   value={userDetails.username}
                   onChange={handleInputChange}
@@ -92,7 +91,6 @@ const SignUp = ({
               <FormControl id="email" isRequired>
                 <FormLabel>Email</FormLabel>
                 <Input
-                  autoComplete="true"
                   type="email"
                   value={userDetails.email}
                   onChange={handleInputChange}
