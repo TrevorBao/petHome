@@ -65,14 +65,18 @@ const CreatePetInfo = () => {
     where("userId", "==", auth?.currentUser?.uid)
   );
 
-  const uploadFiles = async () => {
+  const uploadFiles = async (petId: string) => {
     if (fileUpload) {
       setUploadingImages(true);
       const newImageUrls = [];
+      const userId = auth?.currentUser?.uid;
 
       // Create an array of promises for the upload tasks
       const uploadPromises = Array.from(fileUpload).map((file) => {
-        const fileFolderRef = ref(storage, `users/${file.name}`);
+        const fileFolderRef = ref(
+          storage,
+          `users/${userId}/pets/${petId}/${file.name}`
+        );
         return uploadBytes(fileFolderRef, file).then((snapshot) =>
           getDownloadURL(snapshot.ref)
         );
@@ -123,7 +127,7 @@ const CreatePetInfo = () => {
         userId: auth?.currentUser?.uid,
       });
 
-      const newImageUrls = (await uploadFiles()) || [];
+      const newImageUrls = (await uploadFiles(petDocRef.id)) || [];
 
       if (!newImageUrls) {
         toast({
