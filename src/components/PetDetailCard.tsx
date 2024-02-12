@@ -37,15 +37,18 @@ const PetDetailCard = ({ pet }: Props) => {
     <Card
       direction={{ base: "column", md: "row" }}
       overflow="hidden"
-      variant="outline"
+      variant="elevated"
       padding={10}
+      borderRadius="3xl"
+      shadow="lg"
+      mb={10}
     >
       <Container
         order={{ base: 1, md: 1 }}
         position="relative"
         onMouseEnter={onOpen}
         onMouseLeave={onClose}
-        maxW={{ base: "100%", sm: "100%", lg: "530px" }}
+        maxW={{ base: "100%", lg: "530px" }}
       >
         {hasMultipleImages && isOpen && (
           <>
@@ -92,13 +95,13 @@ const PetDetailCard = ({ pet }: Props) => {
           </>
         )}
         <Image
-          overflow="scroll"
+          overflow="hidden"
           src={pet.imageUrls?.[currentImageIndex] || imagePlaceholder}
           alt={`${pet.name}`}
           onClick={() =>
             openPreview(pet.imageUrls?.[currentImageIndex] || imagePlaceholder)
           }
-          borderRadius="lg"
+          borderRadius="3xl"
         />
       </Container>
       <Stack
@@ -110,7 +113,7 @@ const PetDetailCard = ({ pet }: Props) => {
         <CardBody>
           <Heading size="xl">{pet.name}</Heading>
 
-          <Text py="3">
+          <Text pt="3">
             {pet.name} is a {pet.sex} {pet.breed} {pet.type.toUpperCase()}, it
             is {pet.age} old, with a weight of {pet.weight} kg. {pet.name} is a
             beloved member of the family, bringing joy and companionship to all

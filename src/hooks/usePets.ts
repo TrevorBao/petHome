@@ -15,6 +15,7 @@ export interface PetProps {
     allergy?: string;
     detail?: string;
     imageUrls?: string[];
+    userId: string;
   }
 
   interface UsePetsResponse {
