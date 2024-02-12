@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 import placeholder from "../assets/image-placeholder.jpg";
-import { Pet } from "../hooks/usePets";
+import { PetProps } from "../hooks/usePets";
 import {
   Image,
   Heading,
@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 
 interface Props {
-  pet: Pet;
+  pet: PetProps;
 }
 
 const PetCard = ({ pet }: Props) => {

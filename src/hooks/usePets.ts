@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { db } from '../firebase';
 import { collection, onSnapshot, QuerySnapshot, DocumentData } from 'firebase/firestore';
 
-export interface Pet {
+export interface PetProps {
     id: string;
     name: string;
     type: string;
@@ -18,13 +18,13 @@ export interface Pet {
   }
 
   interface UsePetsResponse {
-    pets: Pet[];
+    pets: PetProps[];
     error: string;
     isLoading: boolean;
   }
 
 const usePets = (): UsePetsResponse => {
-    const [pets, setPets] = useState<Pet[]>([]);
+    const [pets, setPets] = useState<PetProps[]>([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
 
@@ -34,8 +34,8 @@ const usePets = (): UsePetsResponse => {
         const unsubscribe = onSnapshot(
           petCollectionRef,
           (snapshot: QuerySnapshot<DocumentData>) => {
-            const petsData: Pet[] = snapshot.docs.map((doc) => ({
-              ...(doc.data() as Pet),
+            const petsData: PetProps[] = snapshot.docs.map((doc) => ({
+              ...(doc.data() as PetProps),
               id: doc.id,
             }));
             setPets(petsData);
