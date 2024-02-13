@@ -22,12 +22,16 @@ const UserDetailCard = ({ user, pet }: Props) => {
     <Card
       p={6}
       bg="linear-gradient(135deg, #7B61FF 0%, #9B82FF 100%)"
-      shadow="lg"
+      style={{
+        boxShadow:
+          "0 10px 15px -3px rgba(114, 70, 222, 0.4), 0 4px 6px -2px rgba(114, 70, 222, 0.15)",
+      }}
       direction={{ base: "column", md: "row" }}
       overflow="hidden"
       variant="filled"
       borderRadius="3xl"
       justifyContent={{ md: "space-between" }}
+      mb={10}
     >
       <Flex>
         <Flex gap={4} pr={5} pl={1}>
@@ -41,13 +45,13 @@ const UserDetailCard = ({ user, pet }: Props) => {
             {user.email}
           </Text>
           <Button
-            bg="#FACD85"
+            bg="#FBC671"
             variant="solid"
             size="sm"
             color="white"
             mt={4}
             borderRadius="xl"
-            _hover={{ bg: "#FBC671" }}
+            _hover={{ bg: "#F0B24F" }}
           >
             <Icon as={ChatIcon} mr={2} />
             Contact

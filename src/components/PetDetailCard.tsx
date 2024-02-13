@@ -42,6 +42,7 @@ const PetDetailCard = ({ pet }: Props) => {
       borderRadius="3xl"
       shadow="lg"
       mb={10}
+      bg="#FEFEFE"
     >
       <Container
         order={{ base: 1, md: 1 }}

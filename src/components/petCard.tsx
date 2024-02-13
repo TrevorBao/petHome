@@ -19,9 +19,11 @@ const PetCard = ({ pet }: Props) => {
   return (
     <div>
       <Card
-        borderRadius="lg"
+        variant="filled"
+        borderRadius="3xl"
         overflow="hidden"
         backgroundColor="white"
+        shadow="lg"
         padding={5}
         m={4}
       >
@@ -30,7 +32,7 @@ const PetCard = ({ pet }: Props) => {
             src={pet.imageUrls?.[0] || placeholder}
             alt={`Image of ${pet.name}, a ${pet.sex} ${pet.breed} ${pet.type}`}
             objectFit="cover"
-            borderRadius="lg"
+            borderRadius="2xl"
           />
         </AspectRatio>
         <CardBody p={4}>
@@ -40,11 +42,14 @@ const PetCard = ({ pet }: Props) => {
         </CardBody>
         <Button
           as={NavLink}
-          variant="solid"
-          colorScheme="blue"
-          width="full"
-          mt="auto"
           to={`/pet/${pet.id}`}
+          mt="auto"
+          width="full"
+          bg="#9B82FF"
+          color="white"
+          variant="solid"
+          borderRadius="xl"
+          _hover={{ bg: "#7246DE" }}
         >
           More
         </Button>
