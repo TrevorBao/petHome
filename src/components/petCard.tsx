@@ -24,7 +24,7 @@ const PetCard = ({ pet }: Props) => {
         overflow="hidden"
         backgroundColor="white"
         shadow="lg"
-        padding={5}
+        padding={7}
         m={4}
       >
         <AspectRatio ratio={1.5}>

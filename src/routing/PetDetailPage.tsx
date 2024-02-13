@@ -5,6 +5,7 @@ import { Container, Heading } from "@chakra-ui/react";
 import UserDetailCard from "../components/UserDetailCard";
 import useUsers from "../hooks/useUsers";
 import PetInfoCard from "../components/PetInfoCard";
+import PetDescriptCard from "../components/PetDescriptCard";
 
 const PetDetailPage = () => {
   const { pets, isLoading: isPetsLoading, error: petsError } = usePets();
@@ -21,6 +22,7 @@ const PetDetailPage = () => {
       <PetDetailCard pet={pet} />
       <UserDetailCard user={user} pet={pet} />
       <PetInfoCard pet={pet} />
+      <PetDescriptCard pet={pet} />
     </Container>
   ) : (
     <div>Pet not found</div>

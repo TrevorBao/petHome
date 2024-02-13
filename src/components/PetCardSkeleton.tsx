@@ -13,7 +13,7 @@ const PetCardSkeleton = () => {
       borderRadius="lg"
       overflow="hidden"
       backgroundColor="white"
-      padding={5}
+      padding={7}
       m={4}
     >
       <AspectRatio ratio={1.5}>

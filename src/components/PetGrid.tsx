@@ -23,7 +23,7 @@ const PetGrid = () => {
       columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
       mt={5}
       px={{ base: "15px", md: "40px", lg: "50px", xl: "60px" }}
-      spacing={10}
+      spacing={5}
       minH="100vh"
     >
       {isLoading &&
