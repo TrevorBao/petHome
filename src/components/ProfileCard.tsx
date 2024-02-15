@@ -6,6 +6,7 @@ import {
   IconButton,
   Text,
   VStack,
+  Tooltip,
 } from "@chakra-ui/react";
 import { UserProps } from "../hooks/useUsers";
 import DetailItem from "./DetailItem";
@@ -33,16 +34,25 @@ const ProfileCard = ({ user }: Props) => {
         w="full"
       >
         {isOwner && (
-          <IconButton
-            icon={<EditIcon />}
-            aria-label="Edit Profile"
-            position="absolute"
-            top={2}
-            right={2}
-            variant="ghost"
-            rounded="2xl"
-            onClick={openModal}
-          />
+          <>
+            <Tooltip
+              label="Edit Profile"
+              fontSize="md"
+              closeDelay={300}
+              hasArrow
+            >
+              <IconButton
+                icon={<EditIcon />}
+                aria-label="Edit Profile"
+                position="absolute"
+                top={2}
+                right={2}
+                variant="ghost"
+                rounded="2xl"
+                onClick={openModal}
+              />
+            </Tooltip>
+          </>
         )}
         <Box position="relative" display="flex" justifyContent="center">
           <Avatar

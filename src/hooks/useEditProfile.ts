@@ -3,15 +3,14 @@ import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "../firebase";
 import { collection, query, getDocs, updateDoc, where, doc } from "firebase/firestore";
 import { UserProps } from './useUsers';
-import useEditProfileModal from './useEditProfileModal';
+import { useToast } from '@chakra-ui/react';
 
 interface Props {
   user: UserProps;
+  onClose: () => void;
 }
 
-const useEditProfile = ({ user }: Props) => {
-  const { closeModal } = useEditProfileModal();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+const useEditProfile = ({ user, onClose }: Props) => {
   const [file, setFile] = useState(null);
   const [formData, setFormData] = useState({
     userName: user.userName,
@@ -22,6 +21,13 @@ const useEditProfile = ({ user }: Props) => {
     job: user.job,
     avatarUrl: user.avatarUrl,
   });
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const toast = useToast();
+
+  const handleModalClose = () => {
+    resetFormData();
+    onClose();
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -86,8 +92,13 @@ const useEditProfile = ({ user }: Props) => {
         });
       }
 
-      console.log("Profile updated successfully!");
-      closeModal();
+      toast({
+        title: 'Profile updated',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      handleModalClose();
     } catch (error) {
       console.error("Error updating profile: ", error);
     }
@@ -118,7 +129,7 @@ const useEditProfile = ({ user }: Props) => {
     handleFileChange,
     updateAvatar,
     handleSubmit,
-    resetFormData,
+    handleModalClose,
     fileInputRef,
   };
 };

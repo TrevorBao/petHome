@@ -17,6 +17,7 @@ import {
 import { EditIcon } from "@chakra-ui/icons";
 import useEditProfile from "../hooks/useEditProfile";
 import { UserProps } from "../hooks/useUsers";
+import { NavLink } from "react-router-dom";
 
 interface Props {
   isOpen: boolean;
@@ -29,15 +30,10 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
     formData,
     handleFileChange,
     handleSubmit,
-    resetFormData,
     fileInputRef,
     handleChange,
-  } = useEditProfile({ user });
-
-  const handleModalClose = () => {
-    resetFormData();
-    onClose();
-  };
+    handleModalClose,
+  } = useEditProfile({ user, onClose });
 
   return (
     <>
@@ -48,7 +44,10 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
         size={{ base: "sm", lg: "md" }}
         isCentered
       >
-        <ModalOverlay />
+        <ModalOverlay
+          bg="blackAlpha.300"
+          backdropFilter="blur(10px) hue-rotate(90deg)"
+        />
         <ModalContent>
           <ModalHeader>Edit Profile</ModalHeader>
           <ModalCloseButton />
@@ -132,14 +131,18 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
                   onChange={handleChange}
                 />
               </FormControl>
+              <Stack direction="row" spacing={4} align="center"></Stack>
             </Stack>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+            <Button bg="#9B82FF" color="white" mr={3} onClick={handleSubmit}>
               Update
             </Button>
             <Button onClick={handleModalClose}>Cancel</Button>
+            <Button ml={3} variant="ghost" as={NavLink} to="/reset">
+              Reset Password
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
