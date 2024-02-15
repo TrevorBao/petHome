@@ -26,8 +26,10 @@ const PetCard = ({ pet }: Props) => {
         shadow="lg"
         padding={7}
         m={4}
+        flexGrow={1}
+        height="100%"
       >
-        <AspectRatio ratio={1.5}>
+        <AspectRatio ratio={1.5} mb={2}>
           <Image
             src={pet.imageUrls?.[0] || placeholder}
             alt={`Image of ${pet.name}, a ${pet.sex} ${pet.breed} ${pet.type}`}
@@ -35,15 +37,16 @@ const PetCard = ({ pet }: Props) => {
             borderRadius="2xl"
           />
         </AspectRatio>
-        <CardBody p={4}>
-          <Heading size="lg">{pet.breed}</Heading>
-          <Text>{pet.age}</Text>
+        <CardBody pb={0}>
+          <Heading size="lg" pb={3}>
+            {pet.breed}
+          </Heading>
+          <Text pb={2}>{pet.age}</Text>
           <Text>{pet.name}</Text>
         </CardBody>
         <Button
           as={NavLink}
           to={`/pet/${pet.id}`}
-          mt="auto"
           width="full"
           bg="#9B82FF"
           color="white"

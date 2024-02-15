@@ -11,12 +11,14 @@ const breakpoints = {
   lg: "62em",
   xl: "80em",
   "2xl": "96em",
+  "3xl": "116em",
 };
 
 const fontSizes = {
   xs: '0.625rem',
   sm: '0.875rem',
   md: '1rem',
+  lg: '1.25rem',
 };
 
 const theme = extendTheme({
@@ -52,7 +54,11 @@ const theme = extendTheme({
     },
     Link: {
       baseStyle: ({
-        fontSize: fontSizes.sm, 
+        fontSize: {
+          base: fontSizes.sm, 
+          xl: fontSizes.md,
+          "3xl": fontSizes.lg,
+        }, 
       }),
     },
     Text: {

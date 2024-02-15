@@ -7,7 +7,7 @@ interface Props {
 
 const PetCardContainer = ({ children }: Props) => {
   return (
-    <Box width="100%" borderRadius={10} overflow="hidden">
+    <Box display="flex" flexDirection="column" height="100%">
       {children}
     </Box>
   );

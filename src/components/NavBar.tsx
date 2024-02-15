@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Flex,
   Box,
@@ -12,35 +11,17 @@ import {
   MenuGroup,
 } from "@chakra-ui/react";
 import logo from "../assets/logo.svg";
-import { auth, db } from "../firebase";
+import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
-import { collection, getDocs, query, where } from "firebase/firestore";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import CustomNavLink from "./CustomNavLink";
+import { UserProps } from "../hooks/useUsers";
 
-const NavBar = () => {
-  const [avatarUrl, setAvatarUrl] = useState("");
-  const [username, setUsername] = useState("");
+interface Props {
+  user: UserProps;
+}
 
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const userQuery = query(
-          collection(db, "userInfo"),
-          where("userId", "==", user.uid)
-        );
-        const querySnapshot = await getDocs(userQuery);
-        const userData = querySnapshot.docs.map((doc) => doc.data());
-        if (userData.length > 0) {
-          setUsername(userData[0].userName);
-          setAvatarUrl(userData[0].avatarUrl);
-        }
-      }
-    });
-
-    return () => unsubscribe();
-  }, []);
-
+const NavBar = ({ user }: Props) => {
   const logout = async () => {
     try {
       await signOut(auth);
@@ -61,7 +42,11 @@ const NavBar = () => {
     >
       <Flex align="center" mr={5} ml={2}>
         <CustomNavLink to="/pet">
-          <Image src={logo} boxSize="32px" alt="Logo" />
+          <Image
+            src={logo}
+            boxSize={{ base: "20px", md: "32px", xl: "46px" }}
+            alt="Logo"
+          />
         </CustomNavLink>
       </Flex>
 
@@ -91,11 +76,15 @@ const NavBar = () => {
             cursor={"pointer"}
             minW={0}
           >
-            <Avatar size="sm" src={avatarUrl} />
+            <Avatar
+              width={{ base: "20px", md: "32px", xl: "46px" }}
+              height={{ base: "20px", md: "32px", xl: "46px" }}
+              src={user.avatarUrl}
+            />
           </MenuButton>
           <MenuList>
-            <MenuGroup title={`Hi, ${username}!`}>
-              <MenuItem as={ReactRouterLink} to="/pet">
+            <MenuGroup title={`Hi, ${user.userName}!`}>
+              <MenuItem as={ReactRouterLink} to={`/user/${user.userId}`}>
                 Profile
               </MenuItem>
               <MenuItem as={ReactRouterLink} to="/pet/add">

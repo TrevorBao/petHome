@@ -8,6 +8,7 @@ import ErrorPage from "./ErrorPage";
 import PrivateRoutes from "./PrivateRoutes";
 import AddPetPage from "./AddPetPage";
 import PetDetailPage from "./PetDetailPage";
+import UserProfilePage from "./UserProfilePage";
 
 const router = createBrowserRouter([
   // path: "/", element: component
@@ -27,12 +28,16 @@ const router = createBrowserRouter([
       {
         path: "/pet",
         element: <Layout />,
-        errorElement: <ErrorPage />,
         children: [
           { index: true, element: <HomePage /> },
           { path: ":id", element: <PetDetailPage /> },
           { path: "add", element: <AddPetPage /> },
         ],
+      },
+      {
+        path: "/user",
+        element: <Layout />,
+        children: [{ path: ":id", element: <UserProfilePage /> }],
       },
     ],
   },

@@ -1,8 +1,11 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
+import useUsers from "../hooks/useUsers";
 
 function Layout() {
+  const { currentUser } = useUsers();
+
   return (
     <Grid
       templateAreas={{
@@ -19,13 +22,8 @@ function Layout() {
         right={0}
         zIndex="sticky"
       >
-        <NavBar />
+        {currentUser && <NavBar user={currentUser} />}
       </GridItem>
-      {/* <Show above="md">
-        <GridItem area="aside" bg="gold">
-          Aside
-        </GridItem>
-      </Show> */}
       <GridItem area="main" bg="gray.50" pt="4rem">
         <Outlet />
       </GridItem>

@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 import {
   collection,
   onSnapshot,
   QuerySnapshot,
   DocumentData,
 } from 'firebase/firestore';
+import { useParams } from 'react-router-dom';
 
 export interface UserProps {
   address: string;
@@ -26,9 +27,12 @@ interface UseUsersResponse {
   users: UserProps[];
   error: string;
   isLoading: boolean;
+  currentUser?: UserProps;
+  ownerUser?: UserProps;
 }
 
 const useUsers = (): UseUsersResponse => {
+  const { id } = useParams();
   const [users, setUsers] = useState<UserProps[]>([]);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +58,10 @@ const useUsers = (): UseUsersResponse => {
     return () => unsubscribe();
   }, []);
 
-  return { users, error, isLoading };
+  const currentUser = users.find((user) => user.userId === auth?.currentUser?.uid);
+  const ownerUser = users.find((user) => user.userId === id);
+
+  return { users, error, isLoading, currentUser, ownerUser };
 }
 
 export default useUsers;

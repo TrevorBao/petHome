@@ -9,18 +9,21 @@ import PetDescriptCard from "../components/PetDescriptCard";
 
 const PetDetailPage = () => {
   const { pets, isLoading: isPetsLoading, error: petsError } = usePets();
-  const { users, isLoading: isUsersLoading, error: usersError } = useUsers();
+  const {
+    currentUser,
+    isLoading: isUsersLoading,
+    error: usersError,
+  } = useUsers();
   const params = useParams();
   const petId = params.id;
 
   const pet = pets.find((pet) => pet.id === petId);
-  const user = users.find((user) => user.userId === pet?.userId);
 
   return pet ? (
     <Container minH="100vh" minW="full" px={10} py={5}>
       <Heading mb={7}>Information of {pet.name}</Heading>
       <PetDetailCard pet={pet} />
-      <UserDetailCard user={user} pet={pet} />
+      {currentUser && <UserDetailCard user={currentUser} pet={pet} />}
       <PetInfoCard pet={pet} />
       <PetDescriptCard pet={pet} />
     </Container>
