@@ -44,7 +44,7 @@ const NavBar = ({ user }: Props) => {
         <CustomNavLink to="/pet">
           <Image
             src={logo}
-            boxSize={{ base: "20px", md: "32px", xl: "46px" }}
+            boxSize={{ base: "25px", md: "32px", xl: "46px" }}
             alt="Logo"
           />
         </CustomNavLink>
@@ -77,8 +77,8 @@ const NavBar = ({ user }: Props) => {
             minW={0}
           >
             <Avatar
-              width={{ base: "20px", md: "32px", xl: "46px" }}
-              height={{ base: "20px", md: "32px", xl: "46px" }}
+              width={{ base: "25px", md: "32px", xl: "46px" }}
+              height={{ base: "25px", md: "32px", xl: "46px" }}
               src={user.avatarUrl}
             />
           </MenuButton>

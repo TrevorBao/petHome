@@ -29,7 +29,7 @@ const PetCard = ({ pet }: Props) => {
         flexGrow={1}
         height="100%"
       >
-        <AspectRatio ratio={1.5} mb={2}>
+        <AspectRatio ratio={3 / 2} mb={2}>
           <Image
             src={pet.imageUrls?.[0] || placeholder}
             alt={`Image of ${pet.name}, a ${pet.sex} ${pet.breed} ${pet.type}`}

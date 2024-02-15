@@ -15,7 +15,7 @@ const PetCardSkeleton = () => {
       padding={7}
       m={4}
     >
-      <AspectRatio ratio={1.5}>
+      <AspectRatio ratio={3 / 2}>
         <Skeleton objectFit="cover" borderRadius="lg" />
       </AspectRatio>
       <CardBody p={4}>
