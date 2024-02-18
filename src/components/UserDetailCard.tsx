@@ -45,13 +45,13 @@ const UserDetailCard = ({ user, pet }: Props) => {
             {user.email}
           </Text>
           <Button
-            bg="#FBC671"
+            bg="#f0b24f"
             variant="solid"
             size="sm"
             color="white"
             mt={4}
             borderRadius="xl"
-            _hover={{ bg: "#F0B24F" }}
+            _hover={{ bg: "#e5a641" }}
           >
             <Icon as={ChatIcon} mr={2} />
             Contact

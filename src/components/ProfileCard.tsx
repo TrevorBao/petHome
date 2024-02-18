@@ -30,7 +30,7 @@ const ProfileCard = ({ user }: Props) => {
         rounded="3xl"
         boxShadow="lg"
         p={10}
-        maxW="md"
+        maxW={{ base: "80vw", md: "md", xl: "lg", "3xl": "2xl" }}
         w="full"
       >
         {isOwner && (

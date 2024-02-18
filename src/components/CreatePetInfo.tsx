@@ -1,15 +1,7 @@
 import { useRef, useState } from "react";
 import { db, auth, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import {
-  collection,
-  addDoc,
-  query,
-  where,
-  getDocs,
-  updateDoc,
-  arrayUnion,
-} from "firebase/firestore";
+import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
 import image from "../assets/uploadImage.svg";
 import {
   FormControl,
@@ -59,11 +51,6 @@ const CreatePetInfo = () => {
   const navigate = useNavigate();
 
   const petCollectionRef = collection(db, "petInfo");
-  const userCollectionRef = collection(db, "userInfo");
-  const userDocRef = query(
-    userCollectionRef,
-    where("userId", "==", auth?.currentUser?.uid)
-  );
 
   const uploadFiles = async (petId: string) => {
     if (fileUpload) {
@@ -142,24 +129,6 @@ const CreatePetInfo = () => {
       await updateDoc(petDocRef, {
         imageUrls: arrayUnion(...newImageUrls),
       });
-
-      // Check if the petRefs field exists and is an array
-      const userDocSnap = await getDocs(userDocRef);
-      if (!userDocSnap.empty) {
-        const userDocData = userDocSnap.docs[0].data();
-        const userDocRef = userDocSnap.docs[0].ref;
-        if (Array.isArray(userDocData.petRefs)) {
-          // If petRefs exists, use arrayUnion to add the new petDocRef.id
-          await updateDoc(userDocRef, {
-            petRefs: arrayUnion(`/petInfo/${petDocRef.id}`),
-          });
-        } else {
-          // If petRefs does not exist, set it as a new array with the new petDocRef.id
-          await updateDoc(userDocRef, {
-            petRefs: [`/petInfo/${petDocRef.id}`],
-          });
-        }
-      }
 
       // Reset form and image states
       setPetName("");
@@ -441,7 +410,12 @@ const CreatePetInfo = () => {
         {imagePreviews.length < 12 && <ImageUploadPlaceholder />}
       </Flex>
 
-      <Button colorScheme="teal" type="submit">
+      <Button
+        bg="#5c946e"
+        color="white"
+        _hover={{ bg: "#4e8560" }}
+        type="submit"
+      >
         Send Message
       </Button>
     </VStack>

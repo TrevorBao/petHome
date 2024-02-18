@@ -48,11 +48,9 @@ const PetCard = ({ pet }: Props) => {
           as={NavLink}
           to={`/pet/${pet.id}`}
           width="full"
-          bg="#9B82FF"
-          color="white"
+          colorScheme="linkedin"
           variant="solid"
           borderRadius="xl"
-          _hover={{ bg: "#7246DE" }}
         >
           More
         </Button>

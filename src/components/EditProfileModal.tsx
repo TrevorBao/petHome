@@ -41,7 +41,7 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
         closeOnOverlayClick={false}
         onClose={handleModalClose}
         isOpen={isOpen}
-        size={{ base: "sm", lg: "md" }}
+        size={{ base: "sm", lg: "md", "2xl": "lg" }}
         isCentered
       >
         <ModalOverlay
@@ -136,7 +136,13 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
           </ModalBody>
 
           <ModalFooter>
-            <Button bg="#9B82FF" color="white" mr={3} onClick={handleSubmit}>
+            <Button
+              bg="#5c946e"
+              color="white"
+              _hover={{ bg: "#4e8560" }}
+              mr={3}
+              onClick={handleSubmit}
+            >
               Update
             </Button>
             <Button onClick={handleModalClose}>Cancel</Button>
