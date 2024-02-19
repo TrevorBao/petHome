@@ -77,7 +77,7 @@ const CreatePetInfo = () => {
       } catch (err) {
         toast({
           title: "Upload Error",
-          description: err.message,
+          description: ( err as Error).message,
           status: "error",
           duration: 3000,
           isClosable: true,

@@ -71,8 +71,8 @@ const PetInfoCard = ({ pet }: Props) => {
           position="absolute"
           right={-20}
           bottom={-20}
-          maxW="80%"
-          maxH="80%"
+          maxW="65%"
+          maxH="65%"
           pointerEvents="auto"
         />
       </Flex>

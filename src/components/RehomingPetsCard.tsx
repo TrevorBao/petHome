@@ -8,9 +8,16 @@ import {
   Grid,
   Button,
   AspectRatio,
+  useDisclosure,
+  IconButton,
 } from "@chakra-ui/react";
-import { ChevronRightIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
 import usePetsByUserId from "../hooks/usePetsByUserId";
+import useIsOwner from "../hooks/useIsOwner";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import EditPetModal from "./EditPetModal";
+import { PetProps } from "../hooks/usePets";
 
 const placeholderImageUrl = "https://via.placeholder.com/150";
 
@@ -20,6 +27,20 @@ interface Props {
 
 const RehomingPetsCard = ({ userId }: Props) => {
   const { pets } = usePetsByUserId({ userId });
+  const { isOwner } = useIsOwner();
+  const [selectedPet, setSelectedPet] = useState<PetProps | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+
+  const handleClickItem = (pet: PetProps) => {
+    navigate(`/pet/${pet.id}`);
+  };
+
+  const handleEdit = (pet: PetProps) => {
+    setSelectedPet(pet);
+    onOpen();
+  };
 
   const itemCount =
     useBreakpointValue({
@@ -32,9 +53,15 @@ const RehomingPetsCard = ({ userId }: Props) => {
       "3xl": 15,
     }) || 0;
 
+  const toggleExpandedView = () => {
+    setIsExpanded((prev) => !prev);
+  };
+
+  const displayedItemCount = isExpanded ? pets.length : itemCount;
+
   const seeMoreWidth = useBreakpointValue({
-    base: "40px",
-    md: "50px",
+    base: "25px",
+    md: "30px",
   });
 
   const gridTemplateColumns =
@@ -67,68 +94,110 @@ const RehomingPetsCard = ({ userId }: Props) => {
   }
 
   return (
-    <Box
-      w="full"
-      bg="white"
-      shadow="lg"
-      borderRadius="3xl"
-      overflow="hidden"
-      mt={10}
-      p={6}
-      position="relative"
-    >
-      <Grid templateColumns={gridTemplateColumns} gap={4} pr={seeMoreWidth}>
-        {pets.slice(0, itemCount).map((pet) => (
-          <AspectRatio key={pet.id} ratio={1} w="100%">
-            <Box
-              position="relative"
-              rounded="xl"
-              transition="transform 0.2s"
-              _hover={{
-                transform: "scale(1.03)",
-              }}
-            >
-              <Image
-                src={pet.imageUrls?.[0] || placeholderImageUrl}
-                alt={pet.name}
-                objectFit="cover"
-                w="full"
-                h="full"
-              />
-              <Center
-                position="absolute"
-                bottom="0"
-                left="0"
-                right="0"
-                bg="blackAlpha.600"
-                color="white"
-                p={2}
-              >
-                <Text fontSize="sm">{pet.name}</Text>
-              </Center>
-            </Box>
-          </AspectRatio>
-        ))}
-        {Array.from({ length: itemCount - pets.length }).map((_, index) => (
-          <AspectRatio key={`placeholder-${index}`} ratio={1} w="100%">
-            <Box bg="white" />
-          </AspectRatio>
-        ))}
-      </Grid>
-
-      <Button
-        rightIcon={<ChevronRightIcon />}
-        colorScheme="gray"
-        variant="ghost"
-        aria-label="See more"
-        position="absolute"
-        right={-6}
-        top="50%"
-        transform="translateY(-50%) rotate(90deg)"
+    <>
+      <Box
+        w="full"
+        bg="white"
+        shadow="lg"
+        borderRadius="3xl"
+        overflow="hidden"
+        mt={10}
+        p={6}
+        position="relative"
       >
-        See more
-      </Button>
-    </Box>
+        <Grid templateColumns={gridTemplateColumns} gap={4} pb={seeMoreWidth}>
+          {pets.slice(0, displayedItemCount).map((pet) => (
+            <AspectRatio key={pet.id} ratio={1} w="100%">
+              <Box
+                key={pet.id}
+                position="relative"
+                rounded="xl"
+                transition="transform 0.2s"
+                _hover={{
+                  transform: "scale(1.03)",
+                }}
+              >
+                <Image
+                  src={pet.imageUrls?.[0] || placeholderImageUrl}
+                  alt={pet.name}
+                  objectFit="cover"
+                  w="full"
+                  h="full"
+                  onClick={() => handleClickItem(pet)}
+                />
+                {isOwner && (
+                  <IconButton
+                    icon={<EditIcon />}
+                    aria-label="Edit pet"
+                    position="absolute"
+                    top="1"
+                    right="1"
+                    size="xs"
+                    onClick={() => handleEdit(pet)}
+                  />
+                )}
+                <Center
+                  position="absolute"
+                  bottom="0"
+                  left="0"
+                  right="0"
+                  bg="blackAlpha.600"
+                  color="white"
+                  p={1}
+                  onClick={() => handleClickItem(pet)}
+                >
+                  <Text fontSize="xs">{pet.name}</Text>
+                </Center>
+              </Box>
+            </AspectRatio>
+          ))}
+          {Array.from({ length: itemCount - pets.length }).map((_, index) => (
+            <AspectRatio key={`placeholder-${index}`} ratio={1} w="100%">
+              <Box bg="white" />
+            </AspectRatio>
+          ))}
+        </Grid>
+
+        <Button
+          colorScheme="gray"
+          variant="ghost"
+          aria-label={isExpanded ? "See less" : "See more"}
+          position="absolute"
+          size="sm"
+          left="50%"
+          bottom="0"
+          transform="translateX(-50%)"
+          onClick={toggleExpandedView}
+          mb={2}
+        >
+          {isExpanded ? "See less" : "See more"}
+          <Box
+            ml={1}
+            as="span"
+            display="inline-flex"
+            alignItems="center"
+            justifyContent="center"
+            height="100%"
+            width="100%"
+            transformOrigin="center"
+            transition="transform 0.3s ease-in-out"
+            transform={isExpanded ? "rotate(180deg)" : "rotate(0deg)"}
+          >
+            <ChevronDownIcon />
+          </Box>
+        </Button>
+      </Box>
+      {selectedPet && (
+        <EditPetModal
+          isOpen={isOpen}
+          onClose={() => {
+            onClose();
+            setSelectedPet(null);
+          }}
+          pet={selectedPet}
+        />
+      )}
+    </>
   );
 };
 
