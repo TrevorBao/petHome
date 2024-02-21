@@ -198,12 +198,13 @@ const EditPetModal = ({ isOpen, onClose, pet }: Props) => {
               {renderImagePreviews()}
               <IconButton
                 ml={3}
+                size="sm"
                 icon={<AddIcon />}
                 aria-label="Add image"
                 onClick={() => fileInputRef.current?.click()}
               />
             </Stack>
-            <input
+            <Input
               type="file"
               multiple
               onChange={handleFileChange}

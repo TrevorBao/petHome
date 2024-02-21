@@ -13,7 +13,7 @@ import { PetProps } from "../hooks/usePets";
 import { ChatIcon } from "@chakra-ui/icons";
 
 interface Props {
-  user: UserProps;
+  user?: UserProps;
   pet: PetProps;
 }
 
@@ -35,14 +35,14 @@ const UserDetailCard = ({ user, pet }: Props) => {
     >
       <Flex>
         <Flex gap={4} pr={5} pl={1}>
-          <Avatar src={user.avatarUrl} name={`${user.userName}`} size="lg" />
+          <Avatar src={user?.avatarUrl} name={`${user?.userName}`} size="lg" />
         </Flex>
         <Box flex="1" pl={{ md: 4 }}>
           <Heading size="md" color="white">
-            Contact {user.userName} to adopt {pet.name}
+            Contact {user?.userName} to adopt {pet.name}
           </Heading>
           <Text fontSize="sm" mt={2.5} color="white">
-            {user.email}
+            {user?.firstName} {user?.lastName}
           </Text>
           <Button
             bg="#f0b24f"

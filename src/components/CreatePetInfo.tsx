@@ -77,7 +77,7 @@ const CreatePetInfo = () => {
       } catch (err) {
         toast({
           title: "Upload Error",
-          description: ( err as Error).message,
+          description: (err as Error).message,
           status: "error",
           duration: 3000,
           isClosable: true,
@@ -102,8 +102,8 @@ const CreatePetInfo = () => {
     try {
       const petDocRef = await addDoc(petCollectionRef, {
         name: petName,
-        breed: petBreed,
-        type: petType,
+        breed: petBreed.toLowerCase(),
+        type: petType.toLowerCase(),
         age: petAge,
         isSpayed: isSpayed,
         sex: petSex,

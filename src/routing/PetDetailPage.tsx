@@ -1,4 +1,3 @@
-import { useParams } from "react-router-dom";
 import PetDetailCard from "../components/PetDetailCard";
 import usePets from "../hooks/usePets";
 import { Container, Heading } from "@chakra-ui/react";
@@ -8,22 +7,14 @@ import PetInfoCard from "../components/PetInfoCard";
 import PetDescriptCard from "../components/PetDescriptCard";
 
 const PetDetailPage = () => {
-  const { pets, isLoading: isPetsLoading, error: petsError } = usePets();
-  const {
-    currentUser,
-    isLoading: isUsersLoading,
-    error: usersError,
-  } = useUsers();
-  const params = useParams();
-  const petId = params.id;
-
-  const pet = pets.find((pet) => pet.id === petId);
+  const { pet, user } = usePets();
+  const { currentUser } = useUsers();
 
   return pet ? (
     <Container minH="100vh" minW="full" px={10} py={5}>
       <Heading mb={7}>Information of {pet.name}</Heading>
       <PetDetailCard pet={pet} />
-      {currentUser && <UserDetailCard user={currentUser} pet={pet} />}
+      {currentUser && <UserDetailCard user={user} pet={pet} />}
       <PetInfoCard pet={pet} />
       <PetDescriptCard pet={pet} />
     </Container>

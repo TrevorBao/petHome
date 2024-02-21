@@ -4,8 +4,12 @@ import PetCard from "./PetCard";
 import PetCardContainer from "./PetCardContainer";
 import PetCardSkeleton from "./PetCardSkeleton";
 
-const PetGrid = () => {
-  const { pets, error, isLoading } = usePets();
+interface Props {
+  searchText: string;
+}
+
+const PetGrid = ({ searchText }: Props) => {
+  const { pets, error, isLoading } = usePets(searchText);
   const toast = useToast();
 
   if (error) {

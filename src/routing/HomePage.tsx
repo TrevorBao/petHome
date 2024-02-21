@@ -1,8 +1,14 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import PetGrid from "../components/PetGrid";
 import PetUtilityPanel from "../components/PetUtilityPanel";
+import { useState } from "react";
+
+export interface PetQuery {
+  searchText: string;
+}
 
 function App() {
+  const [petQuery, setPetQuery] = useState<PetQuery>({} as PetQuery);
   return (
     <>
       <Grid
@@ -14,10 +20,12 @@ function App() {
         h="100vh"
       >
         <GridItem area="nav">
-          <PetUtilityPanel />
+          <PetUtilityPanel
+            onSearch={(searchText) => setPetQuery({ ...petQuery, searchText })}
+          />
         </GridItem>
         <GridItem area="main" bg="gray.50">
-          <PetGrid />
+          <PetGrid searchText={petQuery.searchText} />
         </GridItem>
       </Grid>
       {/* <PetGrid /> */}

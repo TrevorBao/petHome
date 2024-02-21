@@ -29,12 +29,15 @@ const useEditPet = ({ pet, onClose }: Props) => {
   }
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value: originalValue } = e.target;
+    const value = (name === 'type' || name === 'breed') ? originalValue.toLowerCase() : originalValue;
+    
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
     }));
   };
+  
 
   const handleNumber = (valueAsNumber: string) => {
     setFormData((prevFormData) => ({
