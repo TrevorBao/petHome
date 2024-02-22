@@ -7,7 +7,7 @@ import {
   sendEmailVerification,
 } from 'firebase/auth';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { useToast } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { FirebaseError } from 'firebase/app';
@@ -91,7 +91,7 @@ const useSignUp = () => {
     } catch (error) {
       toast({
         title: "Avatar Setting Error",
-        description: error.message,
+        description: (error as Error).message,
         status: "error",
         duration: 3000,
         isClosable: true,
@@ -139,45 +139,86 @@ const useSignUp = () => {
     }
 
     try {
-      await setPersistence(auth, browserSessionPersistence);
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        userDetails.email,
-        password
-      );
-      await sendEmailVerification(userCredential.user);
-
-      const avatarUrl = await uploadAvatar();
-
-      if (!avatarUrl) {
-        throw new Error("Failed to upload avatar and get URL");
+      if (auth.currentUser) {
+        const docRef = doc(db, "userInfo", auth.currentUser.uid);
+        const docSnap = await getDoc(docRef);
+    
+        if (docSnap.exists()) {
+          toast({
+            title: "Save Error",
+            description:
+              "User details already saved in the database.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
       }
+      } else {
+        await setPersistence(auth, browserSessionPersistence);
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          userDetails.email,
+          password
+        );
 
-      await addDoc(userCollectionRef, {
-        address: userDetails.address,
-        avatarUrl: avatarUrl,
-        birthday: userDetails.birthday,
-        email: userDetails.email,
-        firstName: userDetails.firstName,
-        lastName: userDetails.lastName,
-        gender: userDetails.gender,
-        job: userDetails.job,
-        postCode: userDetails.postCode,
-        userName: userDetails.username,
-        userId: auth?.currentUser?.uid,
-      });
+        if (!navigator.onLine) {
+          toast({
+            title: "Network Error",
+            description:
+            "No internet connection. Please try again later.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        
+        const avatarUrl = await uploadAvatar();
+        
+        if (!avatarUrl) {
+          toast({
+            title: "Save Error",
+            description:
+            "Failed to upload avatar and get URL.",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        
+        await sendEmailVerification(userCredential.user);
+        
+        const uid = auth.currentUser!.uid;
 
-      toast({
-        title: "Account Created",
-        description:
-          "Your account has been created successfully. A verification email has been sent to you.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
+        await addDoc(userCollectionRef, {
+          address: userDetails.address,
+          avatarUrl: avatarUrl,
+          birthday: userDetails.birthday,
+          email: userDetails.email,
+          firstName: userDetails.firstName,
+          lastName: userDetails.lastName,
+          gender: userDetails.gender,
+          job: userDetails.job,
+          postCode: userDetails.postCode,
+          userName: userDetails.username,
+          userId: uid,
+        });
+        
 
-      handleAuthSuccess();
+        toast({
+          title: "Account Created",
+          description:
+            "Your account has been created successfully. A verification email has been sent to you.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+
+        handleAuthSuccess();
+      }
     } catch (err) {
+      if (auth?.currentUser) {
+        await auth?.currentUser?.delete();
+      }
       handleAuthError(err);
     }
   };
