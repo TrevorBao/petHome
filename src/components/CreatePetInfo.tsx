@@ -1,7 +1,13 @@
 import { useRef, useState } from "react";
 import { db, auth, storage } from "../firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { collection, addDoc, updateDoc, arrayUnion } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  updateDoc,
+  arrayUnion,
+  serverTimestamp,
+} from "firebase/firestore";
 import image from "../assets/uploadImage.svg";
 import {
   FormControl,
@@ -112,6 +118,7 @@ const CreatePetInfo = () => {
         detail: detail,
         allergy: allergy,
         userId: auth?.currentUser?.uid,
+        createTime: serverTimestamp(),
       });
 
       const newImageUrls = (await uploadFiles(petDocRef.id)) || [];

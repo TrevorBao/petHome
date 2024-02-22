@@ -1,15 +1,16 @@
 import { SimpleGrid, useToast } from "@chakra-ui/react";
-import usePets from "../hooks/usePets";
+import usePets, { SortOption } from "../hooks/usePets";
 import PetCard from "./PetCard";
 import PetCardContainer from "./PetCardContainer";
 import PetCardSkeleton from "./PetCardSkeleton";
 
 interface Props {
   searchText: string;
+  sortOption: SortOption;
 }
 
-const PetGrid = ({ searchText }: Props) => {
-  const { pets, error, isLoading } = usePets(searchText);
+const PetGrid = ({ searchText, sortOption }: Props) => {
+  const { pets, error, isLoading } = usePets(searchText, sortOption);
   const toast = useToast();
 
   if (error) {
@@ -25,7 +26,7 @@ const PetGrid = ({ searchText }: Props) => {
   return (
     <SimpleGrid
       columns={{ sm: 1, md: 2, lg: 3, xl: 4 }}
-      mt={5}
+      mt={3}
       px={{ base: "15px", md: "40px", lg: "50px", xl: "60px" }}
       spacing={5}
       minH="100vh"

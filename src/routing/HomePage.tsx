@@ -2,13 +2,18 @@ import { Grid, GridItem } from "@chakra-ui/react";
 import PetGrid from "../components/PetGrid";
 import PetUtilityPanel from "../components/PetUtilityPanel";
 import { useState } from "react";
+import { SORT_OPTIONS, SortOption } from "../hooks/usePets";
 
 export interface PetQuery {
   searchText: string;
+  sortOption: SortOption;
 }
 
 function App() {
-  const [petQuery, setPetQuery] = useState<PetQuery>({} as PetQuery);
+  const [petQuery, setPetQuery] = useState<PetQuery>({
+    searchText: "",
+    sortOption: SORT_OPTIONS.NAME_ASC,
+  } as PetQuery);
   return (
     <>
       <Grid
@@ -22,10 +27,16 @@ function App() {
         <GridItem area="nav">
           <PetUtilityPanel
             onSearch={(searchText) => setPetQuery({ ...petQuery, searchText })}
+            onSortChange={(sortOption) =>
+              setPetQuery({ ...petQuery, sortOption })
+            }
           />
         </GridItem>
         <GridItem area="main" bg="gray.50">
-          <PetGrid searchText={petQuery.searchText} />
+          <PetGrid
+            searchText={petQuery.searchText}
+            sortOption={petQuery.sortOption}
+          />
         </GridItem>
       </Grid>
       {/* <PetGrid /> */}

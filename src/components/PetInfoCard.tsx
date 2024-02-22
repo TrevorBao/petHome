@@ -39,7 +39,9 @@ const PetInfoCard = ({ pet }: Props) => {
             {Object.entries(pet).map(([key, value]) => {
               // Check if the key is not one of the excluded fields and the value is truthy
               if (
-                !["userId", "detail", "imageUrls", "id"].includes(key) &&
+                !["userId", "detail", "imageUrls", "id", "createTime"].includes(
+                  key
+                ) &&
                 value
               ) {
                 return (

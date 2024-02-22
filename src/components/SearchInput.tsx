@@ -32,10 +32,9 @@ const SearchInput = ({ onSearch }: Props) => {
           ref={ref}
           pl="2.2rem"
           borderRadius="full"
-          placeholder="Search pets"
+          placeholder="Search pets by type/breed..."
           variant="filled"
           size="sm"
-          mr={3}
         />
       </InputGroup>
     </form>

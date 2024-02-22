@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { db } from '../firebase';
-import { collection, onSnapshot, query, or, where } from 'firebase/firestore';
+import { collection, onSnapshot, query, or, where, orderBy } from 'firebase/firestore';
 import useUsers, { UserProps } from './useUsers';
 import { useParams } from 'react-router-dom';
 
@@ -29,7 +29,20 @@ export interface PetProps {
     pet?: PetProps;
   }
 
-const usePets = (searchText?: string): UsePetsResponse => {
+type OrderByDirection = 'asc' | 'desc';
+export interface SortOption {
+  field: string;
+  direction: OrderByDirection;
+}
+
+export const SORT_OPTIONS = {
+  NAME_ASC: { field: 'name', direction: 'asc' as OrderByDirection },
+  NAME_DESC: { field: 'name', direction: 'desc' as OrderByDirection },
+  DATE_ADDED_ASC: { field: 'createTime', direction: 'asc' as OrderByDirection },
+  DATE_ADDED_DESC: { field: 'createTime', direction: 'desc' as OrderByDirection },
+};
+
+const usePets = (searchText?: string, sortOption: SortOption = SORT_OPTIONS.NAME_ASC): UsePetsResponse => {
     const [pets, setPets] = useState<PetProps[]>([]);
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(true);
@@ -48,9 +61,9 @@ const usePets = (searchText?: string): UsePetsResponse => {
           const lowerSearchText = searchText.toLowerCase();
           const typeQuery = where('type', '==', lowerSearchText);
           const breedQuery = where('breed', '==', lowerSearchText);
-          queryRef = query(petCollectionRef, or(typeQuery, breedQuery));
+          queryRef = query(petCollectionRef, or(typeQuery, breedQuery), orderBy(sortOption.field, sortOption.direction));
         } else {
-          queryRef = query(petCollectionRef);
+          queryRef = query(petCollectionRef, orderBy(sortOption.field, sortOption.direction));
         }
 
 
@@ -68,13 +81,13 @@ const usePets = (searchText?: string): UsePetsResponse => {
             setError(err.message);
 
 
-            
+
             setIsLoading(false);
           }
         );
     
         return () => unsubscribe();
-      }, [searchText]);
+      }, [searchText, sortOption]);
 
       return { pets, error, isLoading, user, pet };
 }
