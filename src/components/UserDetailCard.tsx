@@ -11,6 +11,7 @@ import {
 import { UserProps } from "../hooks/useUsers";
 import { PetProps } from "../hooks/usePets";
 import { ChatIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 interface Props {
   user?: UserProps;
@@ -18,6 +19,8 @@ interface Props {
 }
 
 const UserDetailCard = ({ user, pet }: Props) => {
+  const navigate = useNavigate();
+
   return (
     <Card
       p={6}
@@ -35,7 +38,13 @@ const UserDetailCard = ({ user, pet }: Props) => {
     >
       <Flex>
         <Flex gap={4} pr={5} pl={1}>
-          <Avatar src={user?.avatarUrl} name={`${user?.userName}`} size="lg" />
+          <Avatar
+            src={user?.avatarUrl}
+            name={`${user?.userName}`}
+            size="lg"
+            onClick={() => navigate(`/user/${pet.userId}`)}
+            cursor="pointer"
+          />
         </Flex>
         <Box flex="1" pl={{ md: 4 }}>
           <Heading size="md" color="white">

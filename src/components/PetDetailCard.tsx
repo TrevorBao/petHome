@@ -103,6 +103,7 @@ const PetDetailCard = ({ pet }: Props) => {
             openPreview(pet.imageUrls?.[currentImageIndex] || imagePlaceholder)
           }
           borderRadius="3xl"
+          cursor="pointer"
         />
       </Container>
       <Stack

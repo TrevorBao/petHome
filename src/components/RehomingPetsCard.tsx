@@ -116,6 +116,7 @@ const RehomingPetsCard = ({ userId }: Props) => {
                 _hover={{
                   transform: "scale(1.03)",
                 }}
+                cursor="pointer"
               >
                 <Image
                   src={pet.imageUrls?.[0] || placeholderImageUrl}
