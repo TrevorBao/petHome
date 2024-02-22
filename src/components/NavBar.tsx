@@ -41,7 +41,7 @@ const NavBar = ({ user }: Props) => {
       boxShadow="0 4px 6px -1px rgba(0, 0, 0, 0.03), 0 2px 4px -1px rgba(0, 0, 0, 0.008)"
     >
       <Flex align="center" mr={5} ml={2}>
-        <CustomNavLink to="/pet">
+        <CustomNavLink to="/">
           <Image
             src={logo}
             boxSize={{ base: "25px", md: "32px", xl: "46px" }}
@@ -56,13 +56,13 @@ const NavBar = ({ user }: Props) => {
         alignItems="center"
         flexGrow={1}
       >
-        <CustomNavLink to="/pet" px={2}>
+        <CustomNavLink to="/" px={2}>
           Home
         </CustomNavLink>
-        <CustomNavLink to="/pet/add" px={2}>
+        <CustomNavLink to="/add" px={2}>
           Adoption
         </CustomNavLink>
-        <CustomNavLink to="/pet/add" px={2}>
+        <CustomNavLink to="/add" px={2}>
           Chat
         </CustomNavLink>
       </Box>
@@ -87,7 +87,7 @@ const NavBar = ({ user }: Props) => {
               <MenuItem as={ReactRouterLink} to={`/user/${user.userId}`}>
                 Profile
               </MenuItem>
-              <MenuItem as={ReactRouterLink} to="/pet/add">
+              <MenuItem as={ReactRouterLink} to="/add">
                 Rehome
               </MenuItem>
               <MenuItem onClick={logout}>Log out</MenuItem>

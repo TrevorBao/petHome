@@ -34,7 +34,7 @@ const RehomingPetsCard = ({ userId }: Props) => {
   const navigate = useNavigate();
 
   const handleClickItem = (pet: PetProps) => {
-    navigate(`/pet/${pet.id}`);
+    navigate(`/${pet.id}`);
   };
 
   const handleEdit = (pet: PetProps) => {

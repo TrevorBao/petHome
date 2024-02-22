@@ -102,7 +102,7 @@ const SignIn = ({
             textAlign="right"
             variant="link"
             _hover={{ color: "teal.700", textDecoration: "none" }}
-            onClick={() => handleNavigation("/reset")}
+            onClick={() => handleNavigation("/auth/reset")}
           >
             Forgot password
           </Button>
@@ -127,7 +127,7 @@ const SignIn = ({
             color="teal"
             textAlign="center"
             fontWeight="bold"
-            to="/register"
+            to="/auth/register"
           >
             Sign up
           </ChakraLink>

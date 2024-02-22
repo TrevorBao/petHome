@@ -39,7 +39,6 @@ function App() {
           />
         </GridItem>
       </Grid>
-      {/* <PetGrid /> */}
     </>
   );
 }

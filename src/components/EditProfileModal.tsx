@@ -146,7 +146,7 @@ const EditProfileModal = ({ isOpen, onClose, user }: Props) => {
               Update
             </Button>
             <Button onClick={handleModalClose}>Cancel</Button>
-            <Button ml={3} variant="ghost" as={NavLink} to="/reset">
+            <Button ml={3} variant="ghost" as={NavLink} to="/auth/reset">
               Reset Password
             </Button>
           </ModalFooter>

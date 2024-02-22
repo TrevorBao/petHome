@@ -159,7 +159,7 @@ const CreatePetInfo = () => {
         isClosable: true,
       });
 
-      navigate("/pet");
+      navigate("/");
     } catch (err) {
       toast({
         title: "Message sent failed.",

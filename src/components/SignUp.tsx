@@ -226,7 +226,7 @@ const SignUp = ({
           color="teal"
           textAlign="center"
           fontWeight="bold"
-          to="/"
+          to="/auth"
         >
           Log In
         </ChakraLink>

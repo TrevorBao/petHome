@@ -70,7 +70,7 @@ const useSignUp = () => {
   };
 
   const handleAuthSuccess = () => {
-    navigate("/pet");
+    navigate("/");
   };
 
   const userCollectionRef = collection(db, "userInfo");

@@ -34,7 +34,7 @@ const PetUtilityPanel = ({ onSearch, onSortChange }: Props) => {
             size="sm"
             icon={<AddIcon />}
             aria-label="Add image"
-            onClick={() => navigate(`/pet/add`)}
+            onClick={() => navigate(`/add`)}
           />
         </HStack>
       </Flex>

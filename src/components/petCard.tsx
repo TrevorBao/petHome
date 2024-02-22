@@ -46,7 +46,7 @@ const PetCard = ({ pet }: Props) => {
         </CardBody>
         <Button
           as={NavLink}
-          to={`/pet/${pet.id}`}
+          to={`/${pet.id}`}
           width="full"
           colorScheme="linkedin"
           variant="solid"

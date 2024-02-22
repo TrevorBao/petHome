@@ -13,7 +13,7 @@ import UserProfilePage from "./UserProfilePage";
 const router = createBrowserRouter([
   // path: "/", element: component
   {
-    path: "/",
+    path: "/auth",
     errorElement: <ErrorPage />,
     children: [
       { index: true, element: <LogInPage /> },
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "/pet",
+        path: "/",
         element: <Layout />,
         children: [
           { index: true, element: <HomePage /> },
