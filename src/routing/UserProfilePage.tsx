@@ -13,7 +13,7 @@ const UserProfilePage = () => {
       <Container minW="full" alignContent="center" alignItems="center">
         <Heading mb={7}>Profile</Heading>
         {ownerUser && <ProfileCard user={ownerUser} />}
-        <RehomingPetsCard userId={id} />
+        {id && <RehomingPetsCard userId={id} />}
       </Container>
     </Container>
   );
