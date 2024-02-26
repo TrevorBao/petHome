@@ -8,7 +8,18 @@ interface Props {
 
 const ChatInputField = ({ newMessage, setNewMessage, handleSubmit }: Props) => {
   return (
-    <HStack as="form" onSubmit={handleSubmit} mt={4} width="full" px={8} pb={8}>
+    <HStack
+      as="form"
+      onSubmit={handleSubmit}
+      width="100%"
+      w="100%"
+      px={5}
+      py={4}
+      bg="white"
+      borderTop="1px solid"
+      borderTopColor="gray.200"
+      zIndex={1}
+    >
       <Input
         flexGrow="1"
         variant="filled"

@@ -67,7 +67,7 @@ const useChat = () => {
   useEffect(() => {
       const timer = setTimeout(() => {
         chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
+      }, 150);
       return () => clearTimeout(timer);
   }, [messages]);
 
@@ -87,9 +87,9 @@ const useChat = () => {
     }
   };
 
-  const getSenderName = (senderId: string) => {
+  const getSenderAvatar = (senderId: string) => {
     const user = users.find((u) => u.userId === senderId);
-    return user ? user.userName : 'Unknown User';
+    return user ? user.avatarUrl : 'Unknown User';
   };
 
   const isCurrentUser = (senderId: string) => {
@@ -101,7 +101,7 @@ const useChat = () => {
     setNewMessage,
     messages,
     handleSubmit,
-    getSenderName,
+    getSenderAvatar,
     isCurrentUser,
     chatEndRef,
     opponentUser,

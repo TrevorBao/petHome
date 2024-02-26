@@ -9,8 +9,8 @@ import PrivateRoutes from "./PrivateRoutes";
 import AddPetPage from "./AddPetPage";
 import PetDetailPage from "./PetDetailPage";
 import UserProfilePage from "./UserProfilePage";
-import ChatUserList from "../components/ChatUserList";
 import ChatPage from "./ChatPage";
+import ChatRoom from "../components/ChatRoom";
 
 const router = createBrowserRouter([
   // path: "/", element: component
@@ -47,8 +47,8 @@ const router = createBrowserRouter([
         children: [
           {
             path: ":id",
-            element: <ChatUserList />,
-            children: [{ path: ":id", element: <ChatPage /> }],
+            element: <ChatPage />,
+            children: [{ path: ":id", element: <ChatRoom /> }],
           },
         ],
       },

@@ -1,43 +1,32 @@
-import { Box, VStack } from "@chakra-ui/react";
+import { VStack } from "@chakra-ui/react";
 import ChatBubble from "./ChatBubble";
 import { IMessage } from "../hooks/useChat";
 
 interface Props {
   messages: IMessage[];
-  getSenderName: (senderId: string) => string;
+  getSenderAvatar: (senderId: string) => string;
   isCurrentUser: (senderId: string) => boolean;
   chatEndRef: React.RefObject<HTMLDivElement>;
-  scrollBarStyle: { [key: string]: unknown };
 }
 
 const ChatMessages = ({
   messages,
-  getSenderName,
+  getSenderAvatar,
   isCurrentUser,
   chatEndRef,
-  scrollBarStyle,
 }: Props) => {
   return (
-    <Box
-      flex="1"
-      overflowY="auto"
-      px={8}
-      pt={6}
-      sx={scrollBarStyle}
-      width="full"
-    >
-      <VStack align="stretch" spacing="4">
-        {messages.map((message) => (
-          <ChatBubble
-            key={message.id}
-            message={message}
-            isCurrentUser={isCurrentUser}
-            getSenderName={getSenderName}
-          />
-        ))}
-        <div ref={chatEndRef} />
-      </VStack>
-    </Box>
+    <VStack align="stretch" spacing="4" mt={5} px={5}>
+      {messages.map((message) => (
+        <ChatBubble
+          key={message.id}
+          message={message}
+          isCurrentUser={isCurrentUser}
+          getSenderAvatar={getSenderAvatar}
+        />
+      ))}
+      <div ref={chatEndRef} />
+    </VStack>
   );
 };
 

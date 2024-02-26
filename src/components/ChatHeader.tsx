@@ -1,22 +1,25 @@
-import { Center, Heading, HStack } from "@chakra-ui/react";
+import { Center, Flex, Heading } from "@chakra-ui/react";
 
 interface Props {
-  opponentUserName: string;
+  chatPartnerName: string;
 }
 
-const ChatHeader = ({ opponentUserName }: Props) => {
+const ChatHeader = ({ chatPartnerName }: Props) => {
   return (
-    <HStack
-      zIndex="sticky"
+    <Flex
       width="full"
-      px={8}
+      px={5}
+      py={3.5}
+      alignItems="center"
       justifyContent="center"
-      backgroundColor="gray.100"
+      bg="gray.50"
+      borderBottom="1px solid"
+      borderColor="gray.200"
     >
       <Center>
-        <Heading>{opponentUserName}</Heading>
+        <Heading size="md">{chatPartnerName}</Heading>
       </Center>
-    </HStack>
+    </Flex>
   );
 };
 

@@ -20,7 +20,7 @@ function Layout() {
         top={0}
         left={0}
         right={0}
-        zIndex="sticky"
+        zIndex="10"
       >
         {currentUser && <NavBar user={currentUser} />}
       </GridItem>
