@@ -43,7 +43,7 @@ const usePetsByUserId = ({userId}: Props) : UsePetsByUserIdResponse => {
       );
   
       return () => unsubscribe();
-    }, []);
+    }, [userId]);
   
     return { pets, error, isLoading };
   }
