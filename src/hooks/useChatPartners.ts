@@ -39,15 +39,25 @@ const useChatPartners = () => {
                   ...latestMessageDoc.data(),
                   id: latestMessageDoc.id,
                 } as IMessage : null;
-                setChatPartners(prevPartners => {
-                  const existingPartnerIndex = prevPartners.findIndex(partner => partner.user.userId === partnerId);
+                setChatPartners((prevPartners) => {
+                  let updatedPartners;
+                  const existingPartnerIndex = prevPartners.findIndex((partner) => partner.user.userId === partnerId);
                   if (existingPartnerIndex !== -1) {
-                    const updatedPartners = [...prevPartners];
-                    updatedPartners[existingPartnerIndex] = { ...updatedPartners[existingPartnerIndex], latestMessage };
-                    return updatedPartners;
+                    updatedPartners = [...prevPartners];
+                    updatedPartners[existingPartnerIndex] = {
+                      ...updatedPartners[existingPartnerIndex],
+                      latestMessage,
+                    };
                   } else {
-                    return [...prevPartners, { user, latestMessage, chatId  }];
+                    updatedPartners = [...prevPartners, { user, latestMessage, chatId }];
                   }
+                  updatedPartners.sort((a, b) => {
+                    const timeA = a.latestMessage?.time?.toDate().getTime() || 0;
+                    const timeB = b.latestMessage?.time?.toDate().getTime() || 0;
+                    return timeB - timeA;
+                  });
+                
+                  return updatedPartners;
                 });
               });
 

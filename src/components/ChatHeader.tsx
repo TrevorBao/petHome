@@ -3,6 +3,7 @@ import { Center, Flex, Heading, IconButton } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
 import { useChatContext } from "../hooks/useChatContext";
+import { IoVideocamOutline } from "react-icons/io5";
 
 interface Props {
   chatPartnerName: string;
@@ -35,7 +36,11 @@ const ChatHeader = ({ chatPartnerName }: Props) => {
       <Center>
         <Heading size="md">{chatPartnerName}</Heading>
       </Center>
-      <span />
+      <IconButton
+        aria-label="Video Call"
+        icon={<IoVideocamOutline />}
+        variant="ghost"
+      />
     </Flex>
   );
 };
