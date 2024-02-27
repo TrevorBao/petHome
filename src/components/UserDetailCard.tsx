@@ -8,10 +8,12 @@ import {
   Icon,
   Text,
 } from "@chakra-ui/react";
-import { UserProps } from "../hooks/useUsers";
+import useUsers, { UserProps } from "../hooks/useUsers";
 import { PetProps } from "../hooks/usePets";
 import { ChatIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
+import useCheckForExistingChat from "../hooks/useCheckForExistingChat";
+import useCreateChat from "../hooks/useCreateChat";
 
 interface Props {
   user?: UserProps;
@@ -20,6 +22,28 @@ interface Props {
 
 const UserDetailCard = ({ user, pet }: Props) => {
   const navigate = useNavigate();
+  const { currentUser } = useUsers();
+  const createChat = useCreateChat();
+  const { chatId, isLoading } = useCheckForExistingChat({
+    currentUser,
+    otherUserId: pet.userId,
+  });
+
+  const handleContactClick = async () => {
+    if (isLoading) {
+      console.log(isLoading);
+      return;
+    }
+    if (pet.userId === currentUser?.userId) return;
+    if (currentUser) {
+      if (chatId) {
+        navigate(`/chat/${currentUser.userId}/${chatId}`);
+      } else {
+        const newChatId = await createChat(currentUser?.userId, pet.userId);
+        navigate(`/chat/${currentUser.userId}/${newChatId}`);
+      }
+    }
+  };
 
   return (
     <Card
@@ -61,6 +85,8 @@ const UserDetailCard = ({ user, pet }: Props) => {
             mt={4}
             borderRadius="xl"
             _hover={{ bg: "#e5a641" }}
+            onClick={handleContactClick}
+            isLoading={isLoading}
           >
             <Icon as={ChatIcon} mr={2} />
             Contact
