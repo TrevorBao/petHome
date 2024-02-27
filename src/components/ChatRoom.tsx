@@ -25,30 +25,26 @@ const ChatRoom = () => {
   };
 
   return (
-    <>
-      <Grid maxW="100%" h="94vh" overflowX="hidden">
-        <GridItem>
-          {opponentUser && (
-            <ChatHeader chatPartnerName={opponentUser.userName} />
-          )}
-        </GridItem>
-        <GridItem maxW="100vw" overflowY="auto" sx={scrollBarStyle}>
-          <ChatMessages
-            messages={messages}
-            getSenderAvatar={getSenderAvatar}
-            isCurrentUser={isCurrentUser}
-            chatEndRef={chatEndRef}
-          />
-        </GridItem>
-        <GridItem>
-          <ChatInputField
-            newMessage={newMessage}
-            setNewMessage={setNewMessage}
-            handleSubmit={handleSubmit}
-          />
-        </GridItem>
-      </Grid>
-    </>
+    <Grid templateRows="auto 1fr auto" maxW="100%" h="94vh" overflowX="hidden">
+      <GridItem>
+        {opponentUser && <ChatHeader chatPartnerName={opponentUser.userName} />}
+      </GridItem>
+      <GridItem maxW="100vw" overflowY="auto" sx={scrollBarStyle}>
+        <ChatMessages
+          messages={messages}
+          getSenderAvatar={getSenderAvatar}
+          isCurrentUser={isCurrentUser}
+          chatEndRef={chatEndRef}
+        />
+      </GridItem>
+      <GridItem>
+        <ChatInputField
+          newMessage={newMessage}
+          setNewMessage={setNewMessage}
+          handleSubmit={handleSubmit}
+        />
+      </GridItem>
+    </Grid>
   );
 };
 

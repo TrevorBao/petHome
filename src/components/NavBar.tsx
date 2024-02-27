@@ -15,13 +15,16 @@ import { auth } from "../firebase";
 import { signOut } from "firebase/auth";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 import CustomNavLink from "./CustomNavLink";
-import { UserProps } from "../hooks/useUsers";
+import useUsers, { UserProps } from "../hooks/useUsers";
+import { useChatContext } from "../hooks/useChatContext";
 
 interface Props {
   user: UserProps;
 }
 
 const NavBar = ({ user }: Props) => {
+  const { currentUser } = useUsers();
+  const { setActiveChatId } = useChatContext();
   const logout = async () => {
     try {
       await signOut(auth);
@@ -62,7 +65,11 @@ const NavBar = ({ user }: Props) => {
         <CustomNavLink to="/add" px={2}>
           Adoption
         </CustomNavLink>
-        <CustomNavLink to="/add" px={2}>
+        <CustomNavLink
+          to={`/chat/${currentUser?.userId}`}
+          px={2}
+          onClick={() => setActiveChatId(null)}
+        >
           Chat
         </CustomNavLink>
       </Box>

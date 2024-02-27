@@ -1,14 +1,30 @@
-import { Grid, GridItem, Text } from "@chakra-ui/react";
-import ChatRoom from "../components/ChatRoom";
+import { Grid, GridItem, useBreakpointValue } from "@chakra-ui/react";
+import ChatUserList from "../components/ChatUserList";
+import { Outlet } from "react-router-dom";
+import ChatPlaceholder from "../components/ChatPlaceholder";
+import { useChatContext } from "../hooks/useChatContext";
 
 const ChatPage = () => {
+  const isLargerThanBase = useBreakpointValue({ base: false, md: true });
+  const { activeChatId } = useChatContext();
+
   return (
-    <Grid templateColumns="auto 1fr" maxW="100vw" overflowX="hidden">
-      <GridItem bg="teal.500" borderRight="1px solid">
-        <Text>ChatUserList</Text>
+    <Grid
+      templateColumns={{ base: "1fr", md: "auto 1fr" }}
+      maxW="100vw"
+      overflowX="hidden"
+    >
+      <GridItem
+        bg="gray.100"
+        h="94vh"
+        borderRight="1px solid"
+        borderColor="gray.300"
+      >
+        <ChatUserList />
       </GridItem>
       <GridItem maxW="100vw">
-        <ChatRoom />
+        <Outlet />
+        {isLargerThanBase && activeChatId == null && <ChatPlaceholder />}
       </GridItem>
     </Grid>
   );
