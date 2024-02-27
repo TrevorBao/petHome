@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Avatar, Box, Flex, Text, useBreakpointValue } from "@chakra-ui/react";
 import useChatPartners from "../hooks/useChatPartners";
 import { useLocation, useNavigate } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
@@ -15,12 +15,23 @@ const ChatUserList = () => {
     return location.pathname.includes(chatId);
   };
 
+  // Use Chakra UI's useBreakpointValue to set responsive sizes
+  const avatarSize = useBreakpointValue({ base: "md", md: "lg" });
+  const paddingX = useBreakpointValue({ base: "2", md: "4" });
+  const minWidth = useBreakpointValue({
+    base: "100%",
+    md: "350px",
+    xl: "400px",
+  });
+
   return (
     <>
       {chatPartners.map((partner, index) => (
         <Box
           key={partner.user.userId || index}
           p={2}
+          px={paddingX}
+          minWidth={minWidth}
           _hover={{ bg: "gray.300" }}
           borderBottom="1px solid"
           borderColor="gray.300"
@@ -30,30 +41,21 @@ const ChatUserList = () => {
             setActiveChatId(partner.chatId);
           }}
         >
-          <Grid
-            templateRows="repeat(2, 1fr)"
-            templateColumns="repeat(5, 1fr)"
-            gap={2}
-            alignItems="center"
-          >
-            <GridItem rowSpan={2} colSpan={1}>
-              <Avatar
-                src={partner.user.avatarUrl}
-                size="md"
-                name={partner.user.userName}
-              />
-            </GridItem>
-            <GridItem colStart={2} colEnd={6}>
+          <Flex align="center" gap="2">
+            <Avatar
+              src={partner.user.avatarUrl}
+              size={avatarSize}
+              name={partner.user.userName}
+            />
+            <Box flex="1">
               <Text fontSize="md" fontWeight="bold" noOfLines={1}>
                 {partner.user.userName}
               </Text>
-            </GridItem>
-            <GridItem colStart={2} colEnd={6}>
               <Text fontSize="sm" color="gray.800" noOfLines={1}>
                 {partner.latestMessage?.text || "No messages yet"}
               </Text>
-            </GridItem>
-          </Grid>
+            </Box>
+          </Flex>
         </Box>
       ))}
     </>
