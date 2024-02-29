@@ -1,5 +1,5 @@
 import { useContext, useEffect } from "react";
-import { VideoCallContext } from "../contexts/VideoCallContex";
+import { VideoCallContext } from "../contexts/VideoCallContext";
 import {
   Box,
   VStack,
@@ -19,14 +19,14 @@ const CallNotify = () => {
   const navigate = useNavigate();
   const { currentUser } = useUsers();
 
-  const onAnswer = () => {
-    navigate(
-      `/chat/${currentUser?.userId}/${incomingCall?.chatId}/call/${incomingCall?.callId}`
-    );
-    toast.closeAll();
-  };
-
   useEffect(() => {
+    const onAnswer = () => {
+      navigate(
+        `/chat/${currentUser?.userId}/${incomingCall?.chatId}/call/${incomingCall?.callId}`
+      );
+      toast.closeAll();
+    };
+
     if (incomingCall) {
       toast({
         duration: 90000,
@@ -59,7 +59,7 @@ const CallNotify = () => {
       });
       setIncomingCall(null);
     }
-  }, [incomingCall, toast, setIncomingCall]);
+  }, [incomingCall, toast, setIncomingCall, currentUser?.userId, navigate]);
 
   return null;
 };

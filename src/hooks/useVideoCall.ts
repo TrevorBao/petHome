@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { arrayUnion, collection, doc, onSnapshot, serverTimestamp, setDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { useParams, useNavigate } from "react-router-dom";
@@ -19,99 +19,6 @@ const useVideoCall = () => {
   const isMountedRef = useRef<boolean>(true);
 
 
-
-  const addLocalStreamtoRTCConnection = () => {
-    const localStream = localStreamRef.current!;
-    localStream.getTracks().forEach((track) => {
-      pc.current!.addTrack(track, localStream);
-    });
-    console.log("将本地视频流添加到 RTC 连接成功");
-  };
-
-  const callsCollectionRef = chatId ? collection(db, 'chats', chatId, 'calls') : null;
-  const callDocRef = callsCollectionRef ? doc(callsCollectionRef, callId) : null;
-  const lastProcessedOfferTimestamp = useRef(0);
-  const lastProcessedAnswerTimestamp = useRef(0);
-  const isCreatingAnswerRef = useRef(false);
-
-  const firestoreSend = useCallback(async (type: string, data: any) => {
-    if (!callDocRef) return;
-  
-    if (type === 'offer' || type === 'answer') {
-      await setDoc(callDocRef, {
-        [type]: {
-          sdp: data.sdp,
-          type: data.type,
-          userId,
-          timestamp: serverTimestamp(),
-        },
-      }, { merge: true });
-    } else if (type === 'candidate') {
-      await setDoc(callDocRef, {
-        candidates: arrayUnion({ candidate: data, userId }),
-      }, { merge: true });
-    }
-  }, [callDocRef, userId]);
-
-  const createAnswer = useCallback(() => {
-    if (isCreatingAnswerRef.current) return;
-  
-    isCreatingAnswerRef.current = true;
-  
-    pc.current
-      ?.createAnswer({
-        offerToReceiveVideo: true,
-        offerToReceiveAudio: true,
-      })
-      .then((sdp) => {
-        return pc.current?.setLocalDescription(sdp);
-      })
-      .then(() => {
-        const answer = pc.current?.localDescription;
-        if (answer) {
-          console.log("Sending answer:", answer);
-          return firestoreSend("answer", { type: answer.type, sdp: answer.sdp });
-        }
-      })
-      .then(() => {
-        setStatus("Calling");
-      })
-      .catch((error) => {
-        console.error("Error creating answer", error);
-      })
-      .finally(() => {
-        isCreatingAnswerRef.current = false;
-      });
-  }, [firestoreSend]);
-
-
-  const hangup = useCallback(async () => {
-    if (!isMountedRef.current) return;
-
-    if (callDocRef) {
-      await setDoc(callDocRef, { callEnded: true }, { merge: true });
-    }
-    // Close the RTCPeerConnection
-    if (pc.current) {
-      pc.current.getSenders().forEach((sender) => {
-        pc.current!.removeTrack(sender); 
-      });
-      pc.current.close();
-      pc.current = undefined;
-    }
-    
-
-    if (localVideoRef.current) {
-      localVideoRef.current.srcObject = null;
-    }
-    if (remoteVideoRef.current) {
-      remoteVideoRef.current.srcObject = null;
-    }
-
-    setStatus('Start');
-    navigate(-1);
-  }, [callDocRef, navigate])
-
   useEffect(() => {
     const getMediaDevices = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -120,65 +27,6 @@ const useVideoCall = () => {
       });
       localVideoRef.current!.srcObject = stream;
       localStreamRef.current = stream;
-    };
-    
-    const setupFirestoreListeners = () => {
-      if (!callDocRef) return;
-  
-      console.log("Setting up Firestore listener for callDocRef:", callDocRef);
-    
-      onSnapshot(callDocRef, (docSnapshot) => {
-        console.log("Firestore listener triggered at:", new Date().toISOString());
-        const callData = docSnapshot.data();
-        console.log("Received call data:", callData);
-        if (!callData) return;
-        if (callData.callEnded) {
-          hangup();
-          return;
-        }
-        // Handle offer
-        if (callData.offer && callData.offer.userId !== userId) {
-          if (callData.offer.timestamp > lastProcessedOfferTimestamp.current) {
-            lastProcessedOfferTimestamp.current = callData.offer.timestamp;
-              if (callData.offer.sdp) {
-                try {
-                  pc.current?.setRemoteDescription(new RTCSessionDescription({
-                    type: 'offer',
-                    sdp: callData.offer.sdp
-                  }))
-                  .then(createAnswer);
-                  console.log("Send Offer");
-                  setStatus("Answer the Call");
-                } catch (error) {
-                  console.error("Error setting remote offer", error);
-                  
-                }
-              }
-        }}
-  
-        if (callData.answer && callData.answer.userId !== userId) {
-        if (callData.answer.timestamp > lastProcessedAnswerTimestamp.current) {
-          lastProcessedAnswerTimestamp.current = callData.answer.timestamp;
-              if (callData.answer.sdp) {
-                pc.current?.setRemoteDescription(new RTCSessionDescription({
-                  type: 'answer',
-                  sdp: callData.answer.sdp
-                }))
-              }
-              console.log("Send Answer");
-              setStatus("Calling");
-          }}
-        
-        // Handle ICE candidates
-        if (callData.candidates) {
-          callData.candidates.forEach((candidate: IceCandidate) => {
-            if (candidate.userId !== userId) {
-              const iceCandidate = JSON.parse(candidate.candidate);
-              pc.current?.addIceCandidate(new RTCIceCandidate(iceCandidate));
-            }
-          });
-        }
-      });
     };
 
     const createRtcConnection = () => {
@@ -209,26 +57,133 @@ const useVideoCall = () => {
       createRtcConnection();
       addLocalStreamtoRTCConnection();
     });
-    
-    const handleUnload = async (event) => {
-      await hangup();
-    };
+
 
     window.addEventListener('beforeunload', handleUnload);
     return () => {
       window.removeEventListener('beforeunload', handleUnload);
     };
-  }, [hangup, callDocRef, createAnswer, userId, firestoreSend]);
+  }, []);
 
 
 
+
+  const addLocalStreamtoRTCConnection = () => {
+    const localStream = localStreamRef.current!;
+    localStream.getTracks().forEach((track) => {
+      pc.current!.addTrack(track, localStream);
+    });
+    console.log("将本地视频流添加到 RTC 连接成功");
+  };
+
+  const callsCollectionRef = chatId ? collection(db, 'chats', chatId, 'calls') : null;
+  const callDocRef = callsCollectionRef ? doc(callsCollectionRef, callId) : null;
+  const lastProcessedOfferTimestamp = useRef(0);
+  const lastProcessedAnswerTimestamp = useRef(0);
+  
+  const setupFirestoreListeners = () => {
+    if (!callDocRef) {
+      console.log("No call document reference found.");
+      return;
+    }
+
+    console.log("Setting up Firestore listener for callDocRef:", callDocRef);
+  
+    const unsubscribe = onSnapshot(callDocRef, async (docSnapshot) => {
+      console.log("Firestore listener triggered at:", new Date().toISOString());
+      
+      if (!docSnapshot.exists()) {
+        console.log("Document does not exist");
+        return;
+      }
+      
+      const callData = docSnapshot.data();
+      console.log("Received call data:", callData);
+      if (!callData) return;
+      if (callData.callEnded) {
+        hangup();
+        return;
+      }
+      // Handle offer
+      if (callData.offer && callData.offer.userId !== userId) {
+        if (callData.offer.timestamp > lastProcessedOfferTimestamp.current) {
+          lastProcessedOfferTimestamp.current = callData.offer.timestamp;
+            if (callData.offer.sdp) {
+              setTimeout(async () => {
+                try {
+                  console.log('开始')
+                  console.log('Received offer SDP from database:', callData.offer.sdp);
+                  await pc.current?.setRemoteDescription(new RTCSessionDescription({
+                    type: 'offer',
+                    sdp: callData.offer.sdp
+                  }));
+                  console.log("Current remote description:", pc.current?.remoteDescription);
+                  setStatus("Answer the Call");
+                  console.log("结束");
+                } catch (error) {
+                  console.error("Error setting remote offer", error);
+                }
+            }, 1000)
+            }
+      }}
+
+      if (callData.answer && callData.answer.userId !== userId) {
+      if (callData.answer.timestamp > lastProcessedAnswerTimestamp.current) {
+        lastProcessedAnswerTimestamp.current = callData.answer.timestamp;
+            if (callData.answer.sdp) {
+              await pc.current?.setRemoteDescription(new RTCSessionDescription({
+                type: 'answer',
+                sdp: callData.answer.sdp
+              }))
+            }
+            console.log("Send Answer");
+            setStatus("Calling");
+        }}
+      
+      // Handle ICE candidates
+      if (callData.candidates) {
+        callData.candidates.forEach((candidate: IceCandidate) => {
+          if (candidate.userId !== userId) {
+            const iceCandidate = JSON.parse(candidate.candidate);
+            pc.current?.addIceCandidate(new RTCIceCandidate(iceCandidate));
+          }
+        });
+      }
+
+
+    }, (error) => {
+      console.error("Error listening to the call document:", error);
+    });
+
+    return unsubscribe;
+  };
+
+  const firestoreSend = async (type: string, data: any) => {
+    if (!callDocRef) return;
+  
+    if (type === 'offer' || type === 'answer') {
+      await setDoc(callDocRef, {
+        [type]: {
+          sdp: data.sdp,
+          type: data.type,
+          userId,
+          timestamp: serverTimestamp(),
+        },
+      }, { merge: true });
+    } else if (type === 'candidate') {
+      await setDoc(callDocRef, {
+        candidates: arrayUnion({ candidate: data, userId }),
+      }, { merge: true });
+    }
+  };
   
   
 
   let isCreatingOffer = false;
+  let isCreatingAnswer = false;
   
   const createOffer = () => {
-    if (isCreatingOffer || isCreatingAnswerRef.current) return;
+    if (isCreatingOffer || isCreatingAnswer) return;
     isCreatingOffer = true;
   
     pc.current
@@ -256,7 +211,85 @@ const useVideoCall = () => {
         isCreatingOffer = false;
       });
   };
+  
+  const createAnswer = () => {
+    if (isCreatingOffer || isCreatingAnswer) return;
+    isCreatingAnswer = true;
+    
+    console.log("阿秋")
+    console.log("Current RTCPeerConnection state:", pc.current);
+    console.log(pc.current?.signalingState)
 
+    // Assuming that the offer has been set as the remote description successfully
+    
+    if (pc.current?.signalingState === "have-remote-offer") {
+      console.log("哒哒");
+      pc.current.createAnswer({
+        offerToReceiveVideo: true,
+        offerToReceiveAudio: true,
+      })
+      .then((sdp) => {
+        console.log("你好啊");
+        return pc.current?.setLocalDescription(sdp);
+      })
+      .then(() => {
+        console.log("好得很");
+        const answer = pc.current?.localDescription;
+        console.log("非常好");
+        if (answer) {
+          console.log("Sending answer:", answer);
+          return firestoreSend("answer", { type: answer.type, sdp: answer.sdp });
+        }
+      })
+      .then(() => {
+        setStatus("Calling");
+      })
+      .catch((error) => {
+        console.error("Error creating answer", error);
+      })
+      .finally(() => {
+        isCreatingAnswer = false;
+      });
+    } else {
+      console.error("Signaling state is not 'have-remote-offer', cannot create answer.");
+      isCreatingAnswer = false;
+    }
+  };
+  
+
+   const handleUnload = async (event) => {
+     await hangup();
+   };
+  
+
+  const hangup = async () => {
+    if (!isMountedRef.current) return;
+
+    if (callDocRef) {
+      await setDoc(callDocRef, { callEnded: true }, { merge: true });
+    }
+
+    console.log("done");
+    // Close the RTCPeerConnection
+    if (pc.current) {
+      pc.current.getSenders().forEach((sender) => {
+        pc.current!.removeTrack(sender); 
+      });
+      pc.current.close();
+      pc.current = undefined;
+    }
+    
+
+    if (localVideoRef.current) {
+      localVideoRef.current.srcObject = null;
+    }
+    if (remoteVideoRef.current) {
+      remoteVideoRef.current.srcObject = null;
+    }
+
+    setStatus('Start');
+    navigate(-1);
+  }
   
   
 
