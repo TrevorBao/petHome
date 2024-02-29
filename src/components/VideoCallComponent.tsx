@@ -1,5 +1,6 @@
 import { Container, Button, AspectRatio } from "@chakra-ui/react";
 import useVideoCall from "../hooks/useVideoCall";
+import { useEffect } from "react";
 
 const VideoCallComponent = () => {
   const {
@@ -8,8 +9,15 @@ const VideoCallComponent = () => {
     createAnswer,
     localVideoRef,
     remoteVideoRef,
-    hangup,
+    onHangup,
   } = useVideoCall();
+
+  useEffect(() => {
+    if (status === "Answer the Call") {
+      createAnswer();
+    }
+  }, [status, createAnswer]);
+
   return (
     <Container>
       <Container>
@@ -25,7 +33,7 @@ const VideoCallComponent = () => {
           </Button>
         )}
         {status === "Calling" && (
-          <Button colorScheme="red" m={3} onClick={hangup}>
+          <Button colorScheme="red" m={3} onClick={onHangup}>
             Hangup
           </Button>
         )}

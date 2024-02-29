@@ -27,6 +27,10 @@ const CallNotify = () => {
       toast.closeAll();
     };
 
+    const onDecline = () => {
+      toast.closeAll();
+    };
+
     if (incomingCall) {
       toast({
         duration: 90000,
@@ -51,6 +55,7 @@ const CallNotify = () => {
                   icon={<CloseIcon />}
                   colorScheme="red"
                   size="sm"
+                  onClick={onDecline}
                 />
               </HStack>
             </VStack>

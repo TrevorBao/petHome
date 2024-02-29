@@ -11,7 +11,6 @@ import PetDetailPage from "./PetDetailPage";
 import UserProfilePage from "./UserProfilePage";
 import ChatPage from "./ChatPage";
 import ChatRoom from "../components/ChatRoom";
-import Call from "../components/Call";
 import VideoCallComponent from "../components/VideoCallComponent";
 
 const router = createBrowserRouter([

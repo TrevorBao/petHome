@@ -101,7 +101,7 @@ const useVideoCall = () => {
       console.log("Received call data:", callData);
       if (!callData) return;
       if (callData.callEnded) {
-        hangup();
+        onHangup();
         return;
       }
       // Handle offer
@@ -258,7 +258,7 @@ const useVideoCall = () => {
   
 
    const handleUnload = async (event) => {
-     await hangup();
+     await onHangup();
    };
   
 
@@ -288,12 +288,16 @@ const useVideoCall = () => {
     }
 
     setStatus('Start');
+  }
+
+  const onHangup = () => {
+    hangup();
     navigate(-1);
   }
   
   
 
-  return {status, createOffer, createAnswer, localVideoRef, remoteVideoRef, hangup}
+  return {status, createOffer, createAnswer, localVideoRef, remoteVideoRef, hangup, onHangup}
 };
 
 export default useVideoCall;
