@@ -33,8 +33,14 @@ export const VideoCallContext = createContext<CallContextType>({
 export const VideoCallProvider = ({ children }: Props) => {
   const { currentUser } = useUsers();
   const [incomingCall, setIncomingCall] = useState<CallData | null>(null);
+  const [hangupSignal, setHangupSignal] = useState(false);
   const [appStartTime] = useState(() => new Date().getTime());
   const timeThreshold = 10000;
+
+  const triggerHangup = () => {
+    setHangupSignal(true);
+    setTimeout(() => setHangupSignal(false), 100); // Reset signal after a brief moment
+  };
 
   useEffect(() => {
     if (!currentUser?.userId) return;
@@ -83,7 +89,7 @@ export const VideoCallProvider = ({ children }: Props) => {
     return () => unsubscribe();
   }, [currentUser, appStartTime]);
 
-  const value = { incomingCall, setIncomingCall };
+  const value = { incomingCall, setIncomingCall, hangupSignal, triggerHangup };
 
   return (
     <VideoCallContext.Provider value={value}>

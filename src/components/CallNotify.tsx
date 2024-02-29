@@ -9,9 +9,11 @@ import {
   IconButton,
   HStack,
 } from "@chakra-ui/react";
+import { collection, doc, setDoc } from "firebase/firestore";
 import { CheckIcon, CloseIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
+import { db } from "../firebase";
 
 const CallNotify = () => {
   const { incomingCall, setIncomingCall } = useContext(VideoCallContext);
@@ -27,7 +29,16 @@ const CallNotify = () => {
       toast.closeAll();
     };
 
-    const onDecline = () => {
+    const onDecline = async () => {
+      const callsCollectionRef = incomingCall?.chatId
+        ? collection(db, "chats", incomingCall.chatId, "calls")
+        : null;
+      const callDocRef = callsCollectionRef
+        ? doc(callsCollectionRef, incomingCall?.callId)
+        : null;
+      if (callDocRef) {
+        await setDoc(callDocRef, { callEnded: true }, { merge: true });
+      }
       toast.closeAll();
     };
 
