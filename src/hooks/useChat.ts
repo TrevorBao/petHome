@@ -22,7 +22,7 @@ export interface IMessage {
 }
 
 const useChat = () => {
-  const { id: chatId } = useParams();
+  const { chatId } = useParams();
   const [newMessage, setNewMessage] = useState('');
   const [messages, setMessages] = useState<IMessage[]>([]);
   const { currentUser, users } = useUsers();

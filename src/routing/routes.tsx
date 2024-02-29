@@ -11,6 +11,8 @@ import PetDetailPage from "./PetDetailPage";
 import UserProfilePage from "./UserProfilePage";
 import ChatPage from "./ChatPage";
 import ChatRoom from "../components/ChatRoom";
+import Call from "../components/Call";
+import VideoCallComponent from "../components/VideoCallComponent";
 
 const router = createBrowserRouter([
   // path: "/", element: component
@@ -46,9 +48,18 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
           {
-            path: ":id",
+            path: ":userId",
             element: <ChatPage />,
-            children: [{ path: ":id", element: <ChatRoom /> }],
+            children: [
+              {
+                path: ":chatId",
+                element: <ChatRoom />,
+              },
+              {
+                path: ":chatId/call/:callId",
+                element: <VideoCallComponent />,
+              },
+            ],
           },
         ],
       },

@@ -3,12 +3,14 @@ import NavBar from "../components/NavBar";
 import { Outlet } from "react-router-dom";
 import useUsers from "../hooks/useUsers";
 import { ChatProvider } from "../contexts/ChatContext";
+import CallNotify from "../components/CallNotify";
 
 function Layout() {
   const { currentUser } = useUsers();
 
   return (
     <ChatProvider>
+      <CallNotify />
       <Grid
         templateAreas={{
           base: `"nav nav" "main main"`,

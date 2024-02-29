@@ -4,11 +4,14 @@ import { ChakraProvider } from "@chakra-ui/react";
 import theme from "./theme.ts";
 import { RouterProvider } from "react-router-dom";
 import router from "./routing/routes.tsx";
+import { VideoCallProvider } from "./contexts/VideoCallContex.tsx";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <RouterProvider router={router}></RouterProvider>
+      <VideoCallProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </VideoCallProvider>
     </ChakraProvider>
   </React.StrictMode>
 );

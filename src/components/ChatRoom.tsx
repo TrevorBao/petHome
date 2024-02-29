@@ -27,7 +27,7 @@ const ChatRoom = () => {
   return (
     <Grid templateRows="auto 1fr auto" maxW="100%" h="94vh" overflowX="hidden">
       <GridItem>
-        {opponentUser && <ChatHeader chatPartnerName={opponentUser.userName} />}
+        {opponentUser && <ChatHeader chatPartner={opponentUser} />}
       </GridItem>
       <GridItem maxW="100vw" overflowY="auto" sx={scrollBarStyle}>
         <ChatMessages
@@ -36,6 +36,7 @@ const ChatRoom = () => {
           isCurrentUser={isCurrentUser}
           chatEndRef={chatEndRef}
         />
+        {/* <VideoCallComponent /> */}
       </GridItem>
       <GridItem>
         <ChatInputField
