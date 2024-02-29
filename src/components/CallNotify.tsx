@@ -44,7 +44,7 @@ const CallNotify = () => {
 
     if (incomingCall) {
       toast({
-        duration: 90000,
+        duration: 60000,
         position: "top-right",
         render: () => (
           <Box p={3} bg="gray.200" color="gray.800" borderRadius="xl">

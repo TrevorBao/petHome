@@ -17,6 +17,8 @@ const useVideoCall = () => {
   const [status, setStatus] = useState("Start");
   const navigate = useNavigate();
   const isMountedRef = useRef<boolean>(true);
+  const hangupTimeoutRef = useRef<number | null>(null);
+
 
 
   useEffect(() => {
@@ -61,6 +63,9 @@ const useVideoCall = () => {
 
     window.addEventListener('beforeunload', handleUnload);
     return () => {
+      if (hangupTimeoutRef.current) {
+        clearTimeout(hangupTimeoutRef.current);
+      }
       window.removeEventListener('beforeunload', handleUnload);
     };
   }, []);
@@ -137,6 +142,7 @@ const useVideoCall = () => {
               }))
             }
             console.log("Send Answer");
+            clearTimeout(hangupTimeoutRef.current!);
             setStatus("Calling");
         }}
       
@@ -198,11 +204,16 @@ const useVideoCall = () => {
         const offer = pc.current?.localDescription;
         if (offer) {
           console.log("Sending offer:", offer);
-          return firestoreSend("offer", { type: offer.type, sdp: offer.sdp });
+          firestoreSend("offer", { type: offer.type, sdp: offer.sdp });
+          setStatus("Waiting for Answering");
+
+          hangupTimeoutRef.current = window.setTimeout(() => {
+            console.log("No answer within 60 seconds, hanging up.");
+            hangup();
+          }, 61000);
+          
+
         }
-      })
-      .then(() => {
-        setStatus("Waiting for Answering");
       })
       .catch((error) => {
         console.error("Error creating offer", error);
@@ -258,6 +269,7 @@ const useVideoCall = () => {
   
 
    const handleUnload = async (event) => {
+    clearTimeout(hangupTimeoutRef.current!);
      await onHangup();
    };
   
