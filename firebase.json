@@ -29,7 +29,7 @@
         ]
       }
     ],
-    "redirect": [
+    "rewrites": [
       {
         "source": "**",
         "destination": "/index.html"
