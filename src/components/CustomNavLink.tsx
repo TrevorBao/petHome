@@ -1,8 +1,16 @@
 import { Link } from "@chakra-ui/react";
+import { ReactNode } from "react";
 import { useMatch, useResolvedPath } from "react-router-dom";
 import { NavLink as ReactRouterLink } from "react-router-dom";
 
-const CustomNavLink = ({ to, children, ...props }) => {
+interface Props {
+  to: string;
+  children: ReactNode;
+  px?: number;
+  onClick?: () => void;
+}
+
+const CustomNavLink = ({ to, children, px, onClick }: Props) => {
   const resolved = useResolvedPath(to);
   const match = useMatch({ path: resolved.pathname, end: true });
 
@@ -10,7 +18,8 @@ const CustomNavLink = ({ to, children, ...props }) => {
     <Link
       as={ReactRouterLink}
       to={to}
-      {...props}
+      px={px}
+      onClick={onClick}
       color={match ? "black" : "gray.500"}
     >
       {children}

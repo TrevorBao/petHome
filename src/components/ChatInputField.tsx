@@ -1,9 +1,10 @@
+import { FormEvent, Dispatch } from "react";
 import { Button, HStack, Input } from "@chakra-ui/react";
 
 interface Props {
   newMessage: string;
-  setNewMessage: React.Dispatch<React.SetStateAction<string>>;
-  handleSubmit: (e: React.FormEvent<HTMLDivElement>) => void;
+  setNewMessage: Dispatch<React.SetStateAction<string>>;
+  handleSubmit: (e: FormEvent<HTMLDivElement>) => void;
 }
 
 const ChatInputField = ({ newMessage, setNewMessage, handleSubmit }: Props) => {

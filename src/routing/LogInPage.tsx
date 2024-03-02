@@ -1,5 +1,5 @@
 import { Center } from "@chakra-ui/react";
-import SignIn from "../components/SignIn";
+import SignIn from "../components/Signin";
 import useSignIn from "../hooks/useSignIn";
 
 const LogInPage = () => {

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, ChangeEvent, MouseEvent } from 'react';
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { auth, db, storage } from "../firebase";
 import { collection, query, getDocs, updateDoc, where, doc } from "firebase/firestore";
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const useEditProfile = ({ user, onClose }: Props) => {
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [formData, setFormData] = useState({
     userName: user.userName,
     address: user.address,
@@ -29,12 +29,12 @@ const useEditProfile = ({ user, onClose }: Props) => {
     onClose();
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement  | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e) => {
+  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files ? e.target.files[0] : null;
     if (file) {
       setFile(file);
@@ -65,7 +65,7 @@ const useEditProfile = ({ user, onClose }: Props) => {
     return user.avatarUrl;
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     let avatarUrl = formData.avatarUrl;
     if (file) {

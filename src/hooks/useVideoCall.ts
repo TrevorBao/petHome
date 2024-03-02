@@ -264,7 +264,7 @@ const useVideoCall = () => {
   };
   
 
-   const handleUnload = async (event) => {
+   const handleUnload = async (_event: BeforeUnloadEvent) => {
     clearTimeout(hangupTimeoutRef.current!);
      await onHangup();
    };

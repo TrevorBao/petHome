@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, ChangeEvent } from 'react';
 import { db, storage } from '../firebase';
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -10,6 +10,11 @@ interface Props {
   onClose: () => void;
 }
 
+interface DataType {
+  [key: string]: any;
+}
+
+
 const useEditPet = ({ pet, onClose }: Props) => {
   const [formData, setFormData] = useState(pet);
   const [isLoading, setLoading] = useState(false);
@@ -17,7 +22,7 @@ const useEditPet = ({ pet, onClose }: Props) => {
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  async function updatePet(petId: string, data) {
+  async function updatePet(petId: string, data: DataType) {
     const petRef = doc(db, 'petInfo', petId);
     await updateDoc(petRef, data);
   }
@@ -28,7 +33,7 @@ const useEditPet = ({ pet, onClose }: Props) => {
     await deleteDoc(petRef);
   }
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement  | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value: originalValue } = e.target;
     const value = (name === 'type' || name === 'breed') ? originalValue.toLowerCase() : originalValue;
     
@@ -47,7 +52,7 @@ const useEditPet = ({ pet, onClose }: Props) => {
   };
   
   
-  const handleFileChange = async (event) => {
+  const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files as FileList);
 
     if (formData.imageUrls) {

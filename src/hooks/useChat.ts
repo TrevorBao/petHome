@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   collection,
@@ -38,7 +38,7 @@ const useChat = () => {
         const chatDoc = await getDoc(chatRef);
         if (chatDoc.exists()) {
           const participants = chatDoc.data().participants || [];
-          const opponentId = participants.find((p) => p !== currentUser?.userId);
+          const opponentId = participants.find((p: string) => p !== currentUser?.userId);
           const opponentUserData = users.find((user) => user.userId === opponentId);
           setOpponentUser(opponentUserData);
         }
@@ -71,7 +71,7 @@ const useChat = () => {
       return () => clearTimeout(timer);
   }, [messages]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!newMessage.trim() || !messagesRef) return;
 
