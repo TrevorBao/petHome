@@ -19,8 +19,6 @@ const useVideoCall = () => {
   const isMountedRef = useRef<boolean>(true);
   const hangupTimeoutRef = useRef<number | null>(null);
 
-
-
   useEffect(() => {
     const getMediaDevices = async () => {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -69,9 +67,6 @@ const useVideoCall = () => {
       window.removeEventListener('beforeunload', handleUnload);
     };
   }, []);
-
-
-
 
   const addLocalStreamtoRTCConnection = () => {
     const localStream = localStreamRef.current!;
@@ -265,6 +260,7 @@ const useVideoCall = () => {
       console.error("Signaling state is not 'have-remote-offer', cannot create answer.");
       isCreatingAnswer = false;
     }
+    
   };
   
 
@@ -302,6 +298,7 @@ const useVideoCall = () => {
     setStatus('Start');
   }
 
+
   const onHangup = () => {
     hangup();
     navigate(-1);
@@ -309,7 +306,7 @@ const useVideoCall = () => {
   
   
 
-  return {status, createOffer, createAnswer, localVideoRef, remoteVideoRef, hangup, onHangup}
+  return {status, createOffer, createAnswer, localVideoRef, remoteVideoRef, hangup, onHangup, localStreamRef}
 };
 
 export default useVideoCall;
