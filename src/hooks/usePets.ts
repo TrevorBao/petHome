@@ -55,15 +55,16 @@ const usePets = (searchText?: string, sortOption: SortOption = SORT_OPTIONS.NAME
     
     useEffect(() => {
         const petCollectionRef = collection(db, "petInfo");
+        const petRef = query(petCollectionRef, where("isAdopted", "==", false))
         let queryRef;
 
         if (searchText) {
           const lowerSearchText = searchText.toLowerCase();
           const typeQuery = where('type', '==', lowerSearchText);
           const breedQuery = where('breed', '==', lowerSearchText);
-          queryRef = query(petCollectionRef, or(typeQuery, breedQuery), orderBy(sortOption.field, sortOption.direction));
+          queryRef = query(petRef, or(typeQuery, breedQuery), orderBy(sortOption.field, sortOption.direction));
         } else {
-          queryRef = query(petCollectionRef, orderBy(sortOption.field, sortOption.direction));
+          queryRef = query(petRef, orderBy(sortOption.field, sortOption.direction));
         }
 
 

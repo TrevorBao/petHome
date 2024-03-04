@@ -54,6 +54,7 @@ const ProfileCard = ({ user }: Props) => {
             </Tooltip>
           </>
         )}
+
         <Box position="relative" display="flex" justifyContent="center">
           <Avatar
             size="2xl"
@@ -65,12 +66,15 @@ const ProfileCard = ({ user }: Props) => {
         <Text fontSize="lg" color="gray.500">
           {user.firstName} {user.lastName}
         </Text>
-        <VStack spacing={3} width="100%" px={4} align="stretch" mt={5}>
-          <DetailItem label="Email" value={user.email} />
-          <DetailItem label="Gender" value={user.gender} />
-          <DetailItem label="Address" value={user.address} />
-          <DetailItem label="Postcode" value={user.postCode} />
-        </VStack>
+
+        {isOwner && (
+          <VStack spacing={3} width="100%" px={4} align="stretch" mt={5}>
+            <DetailItem label="Email" value={user.email} />
+            <DetailItem label="Gender" value={user.gender} />
+            <DetailItem label="Address" value={user.address} />
+            <DetailItem label="Postcode" value={user.postCode} />
+          </VStack>
+        )}
       </Card>
       <EditProfileModal isOpen={isModalOpen} onClose={closeModal} user={user} />
     </>

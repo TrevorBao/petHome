@@ -25,7 +25,7 @@ const usePetsByUserId = ({userId}: Props) : UsePetsByUserIdResponse => {
       }
   
       const petCollectionRef = collection(db, "petInfo");
-      const q = query(petCollectionRef, where("userId", "==", userId));
+      const q = query(petCollectionRef, where("userId", "==", userId), where("isAdopted", "==", false));
       const unsubscribe = onSnapshot(
         q,
         (snapshot: QuerySnapshot<DocumentData>) => {
