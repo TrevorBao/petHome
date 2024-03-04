@@ -9,10 +9,12 @@ import {
   HStack,
   Box,
   Container,
+  Button,
+  Flex,
 } from "@chakra-ui/react";
-import { PetProps } from "../hooks/usePets";
+import usePets, { PetProps } from "../hooks/usePets";
 import imagePlaceholder from "../assets/image-placeholder.jpg";
-
+import { IoPaw } from "react-icons/io5";
 import { ChevronLeftIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import useImageSlider from "../hooks/useImageSlider";
 
@@ -32,6 +34,7 @@ const PetDetailCard = ({ pet }: Props) => {
     setCurrentImageIndex,
     openPreview,
   } = useImageSlider(pet.imageUrls);
+  const { isPetOwner } = usePets();
 
   return (
     <Card
@@ -108,7 +111,7 @@ const PetDetailCard = ({ pet }: Props) => {
       </Container>
       <Stack
         order={{ base: 0, md: 0 }}
-        spacing={4}
+        spacing={{ base: 0, md: 4 }}
         direction="column"
         width="full"
       >
@@ -122,6 +125,32 @@ const PetDetailCard = ({ pet }: Props) => {
             who meet it.
           </Text>
         </CardBody>
+        {!isPetOwner && (
+          <Flex align="center" pl="4" pb="4" borderRadius="full">
+            <Box
+              as={IoPaw}
+              p="2.5"
+              border="2px solid"
+              borderRadius="full"
+              // bg="black"
+              color="black"
+              boxSize="12"
+              mr="4"
+              cursor="pointer"
+              transition="background 0.4s ease-in-out, color 0.4s ease-in-out"
+              _hover={{ bg: "black", color: "white" }}
+              // onClick={handleAdoptPet}
+            />
+            <Button
+              colorScheme="black"
+              variant="link"
+              size="lg"
+              // onClick={handleAdoptPet}
+            >
+              Adopt
+            </Button>
+          </Flex>
+        )}
       </Stack>
     </Card>
   );

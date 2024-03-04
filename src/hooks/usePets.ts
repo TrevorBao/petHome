@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { db } from '../firebase';
+import { auth, db } from '../firebase';
 import { collection, onSnapshot, query, or, where, orderBy } from 'firebase/firestore';
 import useUsers, { UserProps } from './useUsers';
 import { useParams } from 'react-router-dom';
@@ -27,6 +27,7 @@ export interface PetProps {
     isLoading: boolean;
     user?: UserProps;
     pet?: PetProps;
+    isPetOwner: boolean;
   }
 
 type OrderByDirection = 'asc' | 'desc';
@@ -52,6 +53,7 @@ const usePets = (searchText?: string, sortOption: SortOption = SORT_OPTIONS.NAME
     const petId = params.id;
     const pet = pets.find((pet) => pet.id === petId);
     const user = users.find((user) => user.userId === pet?.userId);
+    const isPetOwner = auth.currentUser?.uid === pet?.userId;
     
     useEffect(() => {
         const petCollectionRef = collection(db, "petInfo");
@@ -90,7 +92,7 @@ const usePets = (searchText?: string, sortOption: SortOption = SORT_OPTIONS.NAME
         return () => unsubscribe();
       }, [searchText, sortOption]);
 
-      return { pets, error, isLoading, user, pet };
+      return { pets, error, isLoading, user, pet, isPetOwner };
 }
 
 export default usePets;

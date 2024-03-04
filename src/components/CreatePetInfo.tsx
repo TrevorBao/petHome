@@ -119,6 +119,7 @@ const CreatePetInfo = () => {
         allergy: allergy,
         userId: auth?.currentUser?.uid,
         createTime: serverTimestamp(),
+        isAdopted: false,
       });
 
       const newImageUrls = (await uploadFiles(petDocRef.id)) || [];
