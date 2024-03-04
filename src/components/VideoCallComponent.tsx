@@ -1,9 +1,10 @@
-import { Button, Box, Center, IconButton } from "@chakra-ui/react";
+import { Box, Center, IconButton, Text } from "@chakra-ui/react";
 import useVideoCall from "../hooks/useVideoCall";
 import { useEffect, useState } from "react";
 import { ImPhoneHangUp } from "react-icons/im";
 import { BsCameraVideoOffFill, BsFillCameraVideoFill } from "react-icons/bs";
-import { FaMicrophoneSlash, FaMicrophone } from "react-icons/fa";
+import { FaMicrophoneSlash, FaMicrophone, FaPhoneAlt } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const VideoCallComponent = () => {
   const {
@@ -15,6 +16,7 @@ const VideoCallComponent = () => {
     onHangup,
     localStreamRef,
   } = useVideoCall();
+  const navigate = useNavigate();
 
   const [isAudioMuted, setIsAudioMuted] = useState(true);
   const [isVideoEnabled, setIsVideoEnabled] = useState(true);
@@ -41,6 +43,10 @@ const VideoCallComponent = () => {
     }
   };
 
+  const giveUpCall = () => {
+    navigate(-1);
+  };
+
   useEffect(() => {
     if (status === "Answer the Call") {
       createAnswer();
@@ -52,7 +58,7 @@ const VideoCallComponent = () => {
       <Box position="relative" height="94vh" overflowY="hidden">
         <video
           ref={localVideoRef}
-          style={{ display: "none" }}
+          style={{ width: "100%", height: "auto", display: "none" }}
           autoPlay
           playsInline
         />
@@ -64,36 +70,39 @@ const VideoCallComponent = () => {
             style={{ width: "100%", height: "auto", display: "none" }}
           />
         </Box>
-        <Center position="absolute" top="0" right="0" bottom="0" left="0">
-          <Button colorScheme="green" onClick={createOffer}>
-            Call
-          </Button>
-        </Center>
-      </Box>
-    );
-  }
-
-  if (status === "Answer the Call") {
-    return (
-      <Box position="relative" height="100%">
-        <video
-          ref={localVideoRef}
-          style={{ display: "none" }}
-          autoPlay
-          playsInline
-        />
-        <Box position="absolute" bottom="4" right="4" width="150px" zIndex="5">
-          <video
-            ref={remoteVideoRef}
-            autoPlay
-            playsInline
-            style={{ width: "100%", height: "auto", display: "none" }}
+        <Box
+          position="absolute"
+          left="50%"
+          bottom="4"
+          zIndex="6"
+          transform="translateX(-50%)"
+          backgroundColor="whiteAlpha.700"
+          borderRadius="50px"
+          p={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="nowrap"
+        >
+          <IconButton
+            aria-label="Start a Call"
+            isRound
+            icon={<FaPhoneAlt />}
+            colorScheme="green"
+            m={2}
+            mr={8}
+            onClick={createOffer}
+          />
+          <IconButton
+            aria-label="Give up the Call"
+            isRound
+            icon={<ImPhoneHangUp />}
+            colorScheme="red"
+            onClick={giveUpCall}
           />
         </Box>
         <Center position="absolute" top="0" right="0" bottom="0" left="0">
-          <Button colorScheme="green" onClick={createAnswer}>
-            Answer
-          </Button>
+          <Text fontWeight="bold">Do you want to start a call?</Text>
         </Center>
       </Box>
     );
@@ -116,15 +125,121 @@ const VideoCallComponent = () => {
             style={{ width: "100%", height: "auto", display: "none" }}
           />
         </Box>
-        <Button
-          colorScheme="red"
+        <Box
           position="absolute"
+          left="50%"
           bottom="4"
-          right="4"
-          onClick={onHangup}
+          zIndex="6"
+          transform="translateX(-50%)"
+          backgroundColor="whiteAlpha.700"
+          borderRadius="50px"
+          p={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="nowrap"
         >
-          Cancel
-        </Button>
+          <IconButton
+            aria-label={isAudioMuted ? "unmuted" : "mute"}
+            variant={isAudioMuted ? "solid" : "outline"}
+            icon={isAudioMuted ? <FaMicrophone /> : <FaMicrophoneSlash />}
+            onClick={toggleAudio}
+            m={2}
+            mr={10}
+            isRound
+          />
+          <IconButton
+            aria-label="Hangup"
+            isRound
+            icon={<ImPhoneHangUp />}
+            colorScheme="red"
+            onClick={onHangup}
+          />
+
+          <IconButton
+            aria-label={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}
+            icon={
+              isVideoEnabled ? (
+                <BsFillCameraVideoFill />
+              ) : (
+                <BsCameraVideoOffFill />
+              )
+            }
+            variant={isVideoEnabled ? "solid" : "outline"}
+            onClick={toggleVideo}
+            m={2}
+            ml={10}
+            isRound
+          />
+        </Box>
+      </Box>
+    );
+  }
+
+  if (status === "Answer the Call") {
+    return (
+      <Box position="relative" height="100%">
+        <video
+          ref={localVideoRef}
+          autoPlay
+          playsInline
+          style={{ width: "100%", height: "100%" }}
+        />
+        <Box position="absolute" bottom="4" right="4" width="150px" zIndex="5">
+          <video
+            ref={remoteVideoRef}
+            autoPlay
+            playsInline
+            style={{ width: "100%", height: "auto", display: "none" }}
+          />
+        </Box>
+        <Box
+          position="absolute"
+          left="50%"
+          bottom="4"
+          zIndex="6"
+          transform="translateX(-50%)"
+          backgroundColor="whiteAlpha.700"
+          borderRadius="50px"
+          p={2}
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+          flexWrap="nowrap"
+        >
+          <IconButton
+            aria-label={isAudioMuted ? "unmuted" : "mute"}
+            variant={isAudioMuted ? "solid" : "outline"}
+            icon={isAudioMuted ? <FaMicrophone /> : <FaMicrophoneSlash />}
+            onClick={toggleAudio}
+            m={2}
+            mr={10}
+            isRound
+          />
+          <IconButton
+            aria-label="Hangup"
+            isRound
+            icon={<ImPhoneHangUp />}
+            colorScheme="red"
+            onClick={onHangup}
+          />
+
+          <IconButton
+            aria-label={isVideoEnabled ? "Turn Off Camera" : "Turn On Camera"}
+            icon={
+              isVideoEnabled ? (
+                <BsFillCameraVideoFill />
+              ) : (
+                <BsCameraVideoOffFill />
+              )
+            }
+            variant={isVideoEnabled ? "solid" : "outline"}
+            onClick={toggleVideo}
+            m={2}
+            ml={10}
+            isRound
+          />
+        </Box>
       </Box>
     );
   }
