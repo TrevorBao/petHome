@@ -120,6 +120,7 @@ const CreatePetInfo = () => {
         userId: auth?.currentUser?.uid,
         createTime: serverTimestamp(),
         isAdopted: false,
+        isAdoptionInProgress: false,
       });
 
       const newImageUrls = (await uploadFiles(petDocRef.id)) || [];

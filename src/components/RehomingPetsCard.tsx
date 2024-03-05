@@ -105,6 +105,9 @@ const RehomingPetsCard = ({ userId }: Props) => {
         p={6}
         position="relative"
       >
+        <Text fontWeight="600" fontSize="xl" mb={5}>
+          Rehoming Pets
+        </Text>
         <Grid templateColumns={gridTemplateColumns} gap={4} pb={seeMoreWidth}>
           {pets.slice(0, displayedItemCount).map((pet) => (
             <AspectRatio key={pet.id} ratio={1} w="100%">

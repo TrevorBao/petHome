@@ -19,6 +19,7 @@ export interface PetProps {
     detail?: string;
     imageUrls?: string[];
     userId: string;
+    isAdoptionInProgress: boolean;
   }
 
   interface UsePetsResponse {
@@ -57,7 +58,7 @@ const usePets = (searchText?: string, sortOption: SortOption = SORT_OPTIONS.NAME
     
     useEffect(() => {
         const petCollectionRef = collection(db, "petInfo");
-        const petRef = query(petCollectionRef, where("isAdopted", "==", false))
+        const petRef = query(petCollectionRef, where("isAdopted", "==", false), where("isAdoptionInProgress", "==", false))
         let queryRef;
 
         if (searchText) {
