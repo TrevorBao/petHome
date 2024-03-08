@@ -39,7 +39,7 @@ export const VideoCallProvider = ({ children }: Props) => {
 
   const triggerHangup = () => {
     setHangupSignal(true);
-    setTimeout(() => setHangupSignal(false), 100); // Reset signal after a brief moment
+    setTimeout(() => setHangupSignal(false), 100);
   };
 
   useEffect(() => {

@@ -31,6 +31,13 @@ export const useToggleAdoption = (): UseToggleAdoptionResponse => {
           });
     } finally {
       setIsLoading(false);
+      toast({
+        title: "Send Adoption Request Successfully",
+        description: "Your request has been sent to the shelter. Tip: Ensure your home is ready with essential pet supplies and familiarize yourself with adoption regulations.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
     }
   };
 
