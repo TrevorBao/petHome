@@ -12,12 +12,17 @@ const usePetsByUserId = ({userId}: Props) => {
     where("isAdoptionInProgress", "==", false)
   ]);
 
+  const { pets: adoptedPets, isLoading: adoptedLoading } = usePetsWithQuery([
+    where("adopterId", "==", userId),
+    where("isAdopted", "==", true)
+  ]);
+
   const { pets: rehomedPets, isLoading: rehomedLoading } = usePetsWithQuery([
     where("userId", "==", userId),
     where("isAdopted", "==", true)
   ]);
   
-    return { rehomePets, rehomeLoading, rehomedPets, rehomedLoading };
+    return { rehomePets, rehomeLoading, rehomedPets, rehomedLoading, adoptedPets, adoptedLoading };
   }
 
 export default usePetsByUserId;
