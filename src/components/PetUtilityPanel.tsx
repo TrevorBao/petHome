@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Flex, HStack, IconButton } from "@chakra-ui/react";
+import { Flex, HStack, IconButton, Tooltip } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import SearchInput from "./SearchInput";
 import SortSelector from "./SortSelector";
@@ -30,12 +30,14 @@ const PetUtilityPanel = ({ onSearch, onSortChange }: Props) => {
       >
         <HStack spacing={3}>
           <SortSelector onSortChange={onSortChange} />
-          <IconButton
-            size="sm"
-            icon={<AddIcon />}
-            aria-label="Add image"
-            onClick={() => navigate(`/add`)}
-          />
+          <Tooltip label="Rehome a pet" bg="gray.200" color="black">
+            <IconButton
+              size="sm"
+              icon={<AddIcon />}
+              aria-label="Rehome a pet"
+              onClick={() => navigate(`/add`)}
+            />
+          </Tooltip>
         </HStack>
       </Flex>
     </>

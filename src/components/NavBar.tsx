@@ -94,9 +94,6 @@ const NavBar = ({ user }: Props) => {
               <MenuItem as={ReactRouterLink} to={`/user/${user.userId}`}>
                 Profile
               </MenuItem>
-              <MenuItem as={ReactRouterLink} to="/add">
-                Rehome
-              </MenuItem>
               <MenuItem onClick={logout}>Log out</MenuItem>
             </MenuGroup>
           </MenuList>
