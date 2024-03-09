@@ -1,6 +1,6 @@
 import logoWithText from "../assets/logowithtext.svg";
 import { Link as ReactRouterLink } from "react-router-dom";
-import { Box, Link as ChakraLink, Flex, Icon } from "@chakra-ui/react";
+import { Link as ChakraLink } from "@chakra-ui/react";
 import {
   VStack,
   FormControl,
@@ -18,7 +18,6 @@ import {
   InputRightElement,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
-import { FcGoogle } from "react-icons/fc";
 
 interface SignInProps {
   email: string;
@@ -29,7 +28,6 @@ interface SignInProps {
   show: boolean;
   handleClick: () => void;
   signIn: () => Promise<void>;
-  signInWithGoogle: () => Promise<void>;
   handleNavigation: (value: string) => void;
 }
 
@@ -42,7 +40,6 @@ const SignIn = ({
   show,
   handleClick,
   signIn,
-  signInWithGoogle,
   handleNavigation,
 }: SignInProps) => {
   return (
@@ -109,13 +106,6 @@ const SignIn = ({
         </HStack>
         <Button colorScheme="teal" w="full" onClick={signIn}>
           Log In
-        </Button>
-        <Button colorScheme="gray" w="full" onClick={signInWithGoogle}>
-          <Flex justify="space-between" align="center" w="full">
-            <Icon as={FcGoogle} boxSize={5} />
-            <Text>Sign In With Google</Text>
-            <Box> </Box>
-          </Flex>
         </Button>
         <VStack spacing={1} align="stretch" w="100%">
           <Text mt={6} fontSize="sm" align="center">

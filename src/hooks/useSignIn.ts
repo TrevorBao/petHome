@@ -1,13 +1,11 @@
-// useSignIn.ts
 import { useState } from 'react';
 import { useToast } from '@chakra-ui/react';
-import { auth, googleprovider } from '../firebase';
+import { auth } from '../firebase';
 import {
   browserLocalPersistence,
   browserSessionPersistence,
   setPersistence,
   signInWithEmailAndPassword,
-  signInWithPopup,
 } from 'firebase/auth';
 import { To, useNavigate } from 'react-router-dom';
 
@@ -50,16 +48,6 @@ const useSignIn = () => {
     }
   };
 
-  const signInWithGoogle = async () => {
-    try {
-      const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
-      await setPersistence(auth, persistence);
-      await signInWithPopup(auth, googleprovider);
-      handleAuthSuccess();
-    } catch (error) {
-      handleAuthError();
-    }
-  };
 
   return {
     email,
@@ -70,7 +58,6 @@ const useSignIn = () => {
     show,
     handleClick,
     signIn,
-    signInWithGoogle,
     handleNavigation,
   };
 };

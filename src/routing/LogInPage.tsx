@@ -12,7 +12,6 @@ const LogInPage = () => {
     show,
     handleClick,
     signIn,
-    signInWithGoogle,
     handleNavigation,
   } = useSignIn();
   return (
@@ -26,7 +25,6 @@ const LogInPage = () => {
         show={show}
         handleClick={handleClick}
         signIn={signIn}
-        signInWithGoogle={signInWithGoogle}
         handleNavigation={handleNavigation}
       />
     </Center>
