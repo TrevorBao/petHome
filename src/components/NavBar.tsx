@@ -62,7 +62,7 @@ const NavBar = ({ user }: Props) => {
         <CustomNavLink to="/" px={2}>
           Home
         </CustomNavLink>
-        <CustomNavLink to="/add" px={2}>
+        <CustomNavLink to="/adopt" px={2}>
           Adoption
         </CustomNavLink>
         <CustomNavLink

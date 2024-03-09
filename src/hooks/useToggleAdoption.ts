@@ -5,6 +5,7 @@ import { useToast } from '@chakra-ui/react';
 
 interface UseToggleAdoptionResponse {
   toggleAdoption: (petId: string, adopterId: string, isAdoptionInProgress: boolean) => Promise<void>;
+  declineAdoption: (petId: string) => Promise<void>;
   isLoading: boolean;
 }
 
@@ -41,8 +42,36 @@ export const useToggleAdoption = (): UseToggleAdoptionResponse => {
     }
   };
 
+  const declineAdoption = async (petId: string) => {
+    setIsLoading(true);
+    try {
+      await updateDoc(doc(db, 'petInfo', petId), {
+        isAdoptionInProgress: false,
+        adopterId: null
+      });
+    } catch (error) {
+      toast({
+        title: "Decline Error",
+        description: `Error declining adoption: ${error}`,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setIsLoading(false);
+      toast({
+        title: "Aoption Declined Successfully",
+        description: "You have successfully declined this adoption.",
+        status: "success",
+        duration: 6000,
+        isClosable: true,
+      });
+    }
+  };
+
   return {
     toggleAdoption,
+    declineAdoption,
     isLoading,
   };
 };

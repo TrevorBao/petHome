@@ -2,7 +2,6 @@ import {
   Button,
   ButtonGroup,
   Popover,
-  PopoverArrow,
   PopoverBody,
   PopoverCloseButton,
   PopoverContent,
@@ -52,14 +51,21 @@ const AdoptConfirmationPopover = ({ isAdoptionInProgress, onAdopt }: Props) => {
             </Flex>
           </PopoverTrigger>
           <Portal>
-            <PopoverContent>
-              <PopoverArrow />
+            <PopoverContent color="white" bg="blue.800" borderColor="blue.800">
               <PopoverCloseButton />
-              <PopoverHeader>Confirmation</PopoverHeader>
+              <PopoverHeader pt={4} fontWeight="bold" border="0">
+                Adoption Confirmation
+              </PopoverHeader>
               <PopoverBody>
                 Are you sure you want to adopt this pet?
               </PopoverBody>
-              <PopoverFooter>
+              <PopoverFooter
+                border="0"
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+                pb={4}
+              >
                 <ButtonGroup size="sm">
                   <Button colorScheme="green" onClick={onAdopt}>
                     Adopt

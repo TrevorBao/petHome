@@ -19,6 +19,7 @@ export interface PetProps {
     detail?: string;
     imageUrls?: string[];
     userId: string;
+    adopterId: string;
     isAdoptionInProgress: boolean;
   }
 

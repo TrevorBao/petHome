@@ -12,6 +12,7 @@ import UserProfilePage from "./UserProfilePage";
 import ChatPage from "./ChatPage";
 import ChatRoom from "../components/ChatRoom";
 import VideoCallComponent from "../components/VideoCallComponent";
+import AdoptionPage from "./AdoptionPage";
 
 const router = createBrowserRouter([
   // path: "/", element: component
@@ -41,6 +42,11 @@ const router = createBrowserRouter([
         path: "/user",
         element: <Layout />,
         children: [{ path: ":id", element: <UserProfilePage /> }],
+      },
+      {
+        path: "/adopt",
+        element: <Layout />,
+        children: [{ index: true, element: <AdoptionPage /> }],
       },
       {
         path: "/chat",

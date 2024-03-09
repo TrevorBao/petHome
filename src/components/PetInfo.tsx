@@ -24,7 +24,7 @@ const PetInfo = ({ pet }: PetInfoProps) => {
       toggleAdoption(pet.id, adopterId, isAdoptionInProgress)
         .then(() => {
           setIsAdoptionInProgress(!isAdoptionInProgress);
-          navigate("/");
+          navigate("/adopt");
         })
         .catch((error) => {
           console.error("Error toggling adoption status:", error);
