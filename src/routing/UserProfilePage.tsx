@@ -3,6 +3,7 @@ import ProfileCard from "../components/ProfileCard";
 import useUsers from "../hooks/useUsers";
 import RehomingPetsCard from "../components/RehomingPetsCard";
 import { useParams } from "react-router-dom";
+import RehomedPetsCard from "../components/RehomedPetsCard";
 
 const UserProfilePage = () => {
   const { ownerUser } = useUsers();
@@ -14,6 +15,7 @@ const UserProfilePage = () => {
         <Heading mb={7}>Profile</Heading>
         {ownerUser && <ProfileCard user={ownerUser} />}
         {id && <RehomingPetsCard userId={id} />}
+        {id && <RehomedPetsCard userId={id} />}
       </Container>
     </Container>
   );

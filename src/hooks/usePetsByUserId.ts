@@ -6,13 +6,18 @@ interface Props {
 }
 
 const usePetsByUserId = ({userId}: Props) => {
-  const { pets, error, isLoading } = usePetsWithQuery([
+  const { pets: rehomePets, isLoading: rehomeLoading } = usePetsWithQuery([
     where("userId", "==", userId),
     where("isAdopted", "==", false),
     where("isAdoptionInProgress", "==", false)
   ]);
+
+  const { pets: rehomedPets, isLoading: rehomedLoading } = usePetsWithQuery([
+    where("userId", "==", userId),
+    where("isAdopted", "==", true)
+  ]);
   
-    return { pets, error, isLoading };
+    return { rehomePets, rehomeLoading, rehomedPets, rehomedLoading };
   }
 
 export default usePetsByUserId;

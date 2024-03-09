@@ -4,18 +4,14 @@ import {
   Text,
   Center,
   useBreakpointValue,
-  Card,
   Grid,
   Button,
   AspectRatio,
   useDisclosure,
-  IconButton,
 } from "@chakra-ui/react";
-import { ChevronDownIcon, EditIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 import usePetsByUserId from "../hooks/usePetsByUserId";
-import useIsOwner from "../hooks/useIsOwner";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import EditPetModal from "./EditPetModal";
 import { PetProps } from "../hooks/usePets";
 
@@ -26,21 +22,10 @@ interface Props {
 }
 
 const RehomingPetsCard = ({ userId }: Props) => {
-  const { rehomePets: pets } = usePetsByUserId({ userId });
-  const { isOwner } = useIsOwner();
+  const { rehomedPets: pets } = usePetsByUserId({ userId });
   const [selectedPet, setSelectedPet] = useState<PetProps | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const navigate = useNavigate();
-
-  const handleClickItem = (pet: PetProps) => {
-    navigate(`/${pet.id}`);
-  };
-
-  const handleEdit = (pet: PetProps) => {
-    setSelectedPet(pet);
-    onOpen();
-  };
+  const { isOpen, onClose } = useDisclosure();
 
   const itemCount =
     useBreakpointValue({
@@ -76,21 +61,7 @@ const RehomingPetsCard = ({ userId }: Props) => {
     }) || "repeat(2, 1fr)";
 
   if (pets.length === 0) {
-    return (
-      <Card
-        mt={10}
-        w="full"
-        h="120px"
-        align="center"
-        justify="center"
-        shadow="lg"
-        borderRadius="3xl"
-      >
-        <Text fontSize="lg" fontWeight={600} color="gray.400">
-          Sorry, you do not have rehoming pets yet...
-        </Text>
-      </Card>
-    );
+    return;
   }
 
   return (
@@ -106,40 +77,19 @@ const RehomingPetsCard = ({ userId }: Props) => {
         position="relative"
       >
         <Text fontWeight="600" fontSize="xl" mb={5}>
-          Rehoming Pets
+          Rehomed Pets
         </Text>
         <Grid templateColumns={gridTemplateColumns} gap={4} pb={seeMoreWidth}>
           {pets.slice(0, displayedItemCount).map((pet) => (
             <AspectRatio key={pet.id} ratio={1} w="100%">
-              <Box
-                key={pet.id}
-                position="relative"
-                rounded="xl"
-                transition="transform 0.2s"
-                _hover={{
-                  transform: "scale(1.03)",
-                }}
-                cursor="pointer"
-              >
+              <Box key={pet.id} position="relative" rounded="xl">
                 <Image
                   src={pet.imageUrls?.[0] || placeholderImageUrl}
                   alt={pet.name}
                   objectFit="cover"
                   w="full"
                   h="full"
-                  onClick={() => handleClickItem(pet)}
                 />
-                {isOwner && (
-                  <IconButton
-                    icon={<EditIcon />}
-                    aria-label="Edit pet"
-                    position="absolute"
-                    top="1"
-                    right="1"
-                    size="xs"
-                    onClick={() => handleEdit(pet)}
-                  />
-                )}
                 <Center
                   position="absolute"
                   bottom="0"
@@ -148,7 +98,6 @@ const RehomingPetsCard = ({ userId }: Props) => {
                   bg="blackAlpha.600"
                   color="white"
                   p={1}
-                  onClick={() => handleClickItem(pet)}
                 >
                   <Text fontSize="xs">{pet.name}</Text>
                 </Center>
