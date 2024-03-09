@@ -35,7 +35,6 @@ const RehomingPetsCard = ({ userId }: Props) => {
       lg: 6,
       xl: 7,
       "2xl": 10,
-      "3xl": 15,
     }) || 0;
 
   const toggleExpandedView = () => {
@@ -57,7 +56,6 @@ const RehomingPetsCard = ({ userId }: Props) => {
       lg: "repeat(6, 1fr)",
       xl: "repeat(7, 1fr)",
       "2xl": "repeat(10, 1fr)",
-      "3xl": "repeat(15, 1fr)",
     }) || "repeat(2, 1fr)";
 
   if (pets.length === 0) {
