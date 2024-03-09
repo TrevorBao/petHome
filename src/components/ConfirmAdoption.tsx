@@ -14,13 +14,13 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { useRef } from "react";
-import { SmallCloseIcon } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
 
 interface Props {
-  declineAdoption: () => void;
+  acceptAdoption: () => void;
 }
 
-const CancelConfirmation = ({ declineAdoption }: Props) => {
+const ConfirmAdoption = ({ acceptAdoption }: Props) => {
   const initRef = useRef<HTMLButtonElement>(null);
 
   return (
@@ -30,10 +30,10 @@ const CancelConfirmation = ({ declineAdoption }: Props) => {
           <PopoverTrigger>
             <Center position="relative" mt={8}>
               <IconButton
-                aria-label="Cancel Adoption"
-                colorScheme="red"
+                aria-label="Accept Adoption Request"
+                colorScheme="green"
                 size="sm"
-                icon={<SmallCloseIcon />}
+                icon={<CheckIcon boxSize="2.5" />}
                 isRound
               />
             </Center>
@@ -43,10 +43,11 @@ const CancelConfirmation = ({ declineAdoption }: Props) => {
               <PopoverArrow bg="blue.800" />
               <PopoverCloseButton />
               <PopoverHeader pt={4} fontWeight="bold" border="0">
-                Cancel Confirmation
+                Rehoming Request
               </PopoverHeader>
               <PopoverBody>
-                Are you sure you want to decline this adoption request?
+                Do you want to proceed with allowing this individual to adopt
+                your pet? This action cannot be undone.
               </PopoverBody>
               <PopoverFooter
                 border="0"
@@ -56,8 +57,8 @@ const CancelConfirmation = ({ declineAdoption }: Props) => {
                 pb={4}
               >
                 <ButtonGroup size="sm">
-                  <Button colorScheme="green" onClick={declineAdoption}>
-                    Decline Adoption
+                  <Button colorScheme="green" onClick={acceptAdoption}>
+                    Accept Adoption
                   </Button>
                   <Button colorScheme="blue" ref={initRef} onClick={onClose}>
                     Cancel
@@ -72,4 +73,4 @@ const CancelConfirmation = ({ declineAdoption }: Props) => {
   );
 };
 
-export default CancelConfirmation;
+export default ConfirmAdoption;

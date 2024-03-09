@@ -1,13 +1,13 @@
 import { Flex, SimpleGrid, Spinner, Text } from "@chakra-ui/react";
-import useFetchAdoption from "../hooks/useFetchAdoption";
-import MyAdoptionCard from "./MyAdoptionCard";
+import useFetchRehoming from "../hooks/useFetchRehoming";
+import AdoptionRequestCard from "./AdoptionRequestCard";
 
 interface Props {
   userId: string;
 }
 
-const MyAdoptionProcess = ({ userId }: Props) => {
-  const { pets, isLoading } = useFetchAdoption({ userId });
+const AdoptionRequestProcess = ({ userId }: Props) => {
+  const { pets, isLoading } = useFetchRehoming({ userId });
 
   if (isLoading) {
     return <Spinner thickness="4px" speed="0.65s" size="3xl" />;
@@ -23,7 +23,7 @@ const MyAdoptionProcess = ({ userId }: Props) => {
         textAlign="center"
       >
         <Text fontSize="2xl" fontWeight="bold">
-          You have no ongoing adoptions.
+          You have no adoption requests.
         </Text>
       </Flex>
     );
@@ -39,11 +39,11 @@ const MyAdoptionProcess = ({ userId }: Props) => {
         mx={12}
       >
         {pets.map((pet) => (
-          <MyAdoptionCard key={pet.id} pet={pet} />
+          <AdoptionRequestCard key={pet.id} pet={pet} />
         ))}
       </SimpleGrid>
     </Flex>
   );
 };
 
-export default MyAdoptionProcess;
+export default AdoptionRequestProcess;
