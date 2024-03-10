@@ -24,18 +24,27 @@ const RehomingCounts = ({ userId }: Props) => {
       shadow="lg"
       overflow="hidden"
       variant="elevated"
-      width="fit-content"
+      maxW={{ base: "80vw", md: "fit-content" }}
       p={1}
+      pl={4}
+      pb={0}
+      display="flex"
+      justifyContent="center"
     >
       <CardBody>
-        <Flex alignItems="center" justifyContent="flex-start" wrap="wrap">
+        <Flex alignItems="center" justifyContent="center" wrap="wrap">
           <Box>
             <Text fontSize="3xl" fontWeight={500} color="#A456FD">
               {petsCount.rehomeCount}
             </Text>
             <Text py="2">Rehoming Pets</Text>
           </Box>
-          <Box flexShrink={0} position="relative" width="200px" height="auto">
+          <Box
+            flexShrink={0}
+            position="relative"
+            maxW={{ base: "200px", sm: "220px" }}
+            height="auto"
+          >
             <Tooltip
               hasArrow
               label="The number of your rehoming pets that has not been adopted"
