@@ -8,6 +8,7 @@ import AdoptedPetsCard from "../components/AdoptedPetsCard";
 import RehomingCounts from "../components/RehomingCounts";
 import RehomedCounts from "../components/RehomedCounts";
 import AdoptedCounts from "../components/AdoptedCounts";
+import AdoptingCounts from "../components/AdoptingCounts";
 
 const UserProfilePage = () => {
   const { ownerUser } = useUsers();
@@ -21,6 +22,7 @@ const UserProfilePage = () => {
         {id && <RehomingCounts userId={id} />}
         {id && <RehomedCounts userId={id} />}
         {id && <AdoptedCounts userId={id} />}
+        {id && <AdoptingCounts userId={id} />}
         {id && <AdoptedPetsCard userId={id} />}
         {id && <RehomingPetsCard userId={id} />}
         {id && <RehomedPetsCard userId={id} />}
