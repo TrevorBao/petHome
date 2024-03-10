@@ -24,12 +24,13 @@ const RehomedCounts = ({ userId }: Props) => {
       shadow="lg"
       overflow="hidden"
       variant="elevated"
-      maxW={{ base: "80vw", md: "fit-content" }}
+      maxW={{ base: "100%", md: "fit-content" }}
       p={1}
       pl={4}
       pb={0}
       display="flex"
       justifyContent="center"
+      mb={6}
     >
       <CardBody>
         <Flex alignItems="center" justifyContent="center" wrap="wrap">
@@ -37,12 +38,14 @@ const RehomedCounts = ({ userId }: Props) => {
             <Text fontSize="3xl" fontWeight={500} color="#90c1dd">
               {petsCount.rehomedCount}
             </Text>
-            <Text py="2">Rehomed Pets</Text>
+            <Text fontSize={{ base: "sm", sm: "md" }} fontWeight={500} py="2">
+              Rehomed Pets
+            </Text>
           </Box>
           <Box
             flexShrink={0}
             position="relative"
-            maxW={{ base: "200px", sm: "220px" }}
+            maxW={{ base: "100px", sm: "220px" }}
             height="auto"
           >
             <Tooltip

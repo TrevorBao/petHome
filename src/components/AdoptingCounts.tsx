@@ -24,7 +24,7 @@ const AdoptingCounts = ({ userId }: Props) => {
       shadow="lg"
       overflow="hidden"
       variant="elevated"
-      maxW={{ base: "80vw", md: "fit-content" }}
+      maxW={{ base: "100%", md: "fit-content" }}
       p={1}
       pl={4}
       pb={0}
@@ -37,12 +37,14 @@ const AdoptingCounts = ({ userId }: Props) => {
             <Text fontSize="3xl" fontWeight={500} color="#ed6a5a">
               {petsCount.adoptionProgressCount}
             </Text>
-            <Text py="2">Adoption Requests</Text>
+            <Text fontSize={{ base: "sm", sm: "md" }} fontWeight={500} py="2">
+              Adoption Requests
+            </Text>
           </Box>
           <Box
             flexShrink={0}
             position="relative"
-            maxW={{ base: "200px", sm: "220px" }}
+            maxW={{ base: "90px", sm: "185px", md: "200px" }}
             height="auto"
           >
             <Tooltip
